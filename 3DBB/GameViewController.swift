@@ -1,11 +1,3 @@
-//
-//  GameViewController.swift
-//  3DBB
-//
-//  Created by Joshua Shen on 3/6/20.
-//  Copyright © 2020 Joshua Shen. All rights reserved.
-//
-
 import UIKit
 import QuartzCore
 import SceneKit
@@ -24,13 +16,13 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        cameraNode.position = SCNVector3(x: 1, y: 5, z: 20)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = .omni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 10)
+        lightNode.position = SCNVector3(x: 0, y: 10, z: 15)
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
@@ -41,10 +33,11 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(ambientLightNode)
         
         // retrieve the ship node
-        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
+        let room = scene.rootNode.childNode(withName: "room", recursively: true)!
+        room.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
         
         // animate the 3d object
-        ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+       room.physicsBody?.applyForce(SCNVector3(x: 0, y: 20, z: 0), asImpulse: true) //room.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
         
         // retrieve the SCNView
         let scnView = self.view as! SCNView
