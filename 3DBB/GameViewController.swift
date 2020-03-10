@@ -34,10 +34,14 @@ class GameViewController: UIViewController {
         
         // retrieve the ship node
         let room = scene.rootNode.childNode(withName: "room", recursively: true)!
-        room.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+        let ball = scene.rootNode.childNode(withName: "sphere", recursively: true)
+        //room.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
+        ball?.physicsBody?.velocity = SCNVector3(x: 0, y: 20, z: 0)
+        
+        
         
         // animate the 3d object
-       room.physicsBody?.applyForce(SCNVector3(x: 0, y: 20, z: 0), asImpulse: true) //room.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+       //room.physicsBody?.applyForce(SCNVector3(x: 0, y: 20, z: 0), asImpulse: true) //room.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
         
         // retrieve the SCNView
         let scnView = self.view as! SCNView
