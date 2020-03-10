@@ -33,10 +33,10 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(ambientLightNode)
         
         // retrieve the ship node
-        let room = scene.rootNode.childNode(withName: "room", recursively: true)!
+        //let room = scene.rootNode.childNode(withName: "room", recursively: true)!
         let ball = scene.rootNode.childNode(withName: "sphere", recursively: true)
         //room.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-        ball?.physicsBody?.velocity = SCNVector3(x: 0, y: 20, z: 0)
+        ball?.physicsBody?.velocity = SCNVector3(x: 10, y: 20, z: 0)
         
         
         
