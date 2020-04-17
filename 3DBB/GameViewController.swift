@@ -37,7 +37,7 @@ class GameViewController: UIViewController {
         ball?.physicsBody?.velocity = SCNVector3(x: 10, y: -30, z: 10)
         
         let boxBottom = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
-        boxBottom.firstMaterial?.diffuse.contents = UIColor.blue
+        boxBottom.firstMaterial?.diffuse.contents = UIColor.white
         let boxBottomNode = SCNNode(geometry: boxBottom)
         scene.rootNode.addChildNode(boxBottomNode)
         boxBottomNode.position = SCNVector3(x: 1, y: -2, z: 1)
@@ -46,7 +46,7 @@ class GameViewController: UIViewController {
         boxBottomNode.physicsBody?.friction = 0
 
         let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
-        boxTop.firstMaterial?.diffuse.contents = UIColor.blue
+        boxTop.firstMaterial?.diffuse.contents = UIColor.white
         let boxTopNode = SCNNode(geometry: boxTop)
         scene.rootNode.addChildNode(boxTopNode)
         boxTopNode.position = SCNVector3(x: 1, y: 12, z: 1)
@@ -55,7 +55,7 @@ class GameViewController: UIViewController {
         boxTopNode.physicsBody?.friction = 0
 
         let boxLeft = SCNBox(width: 1, height: 13, length: 13, chamferRadius: 0.2)
-        boxLeft.firstMaterial?.diffuse.contents = UIColor.blue
+        boxLeft.firstMaterial?.diffuse.contents = UIColor.white
         let boxLeftNode = SCNNode(geometry: boxLeft)
         scene.rootNode.addChildNode(boxLeftNode)
         boxLeftNode.position = SCNVector3(x: -5, y: 5, z: 1)
@@ -64,7 +64,7 @@ class GameViewController: UIViewController {
         boxLeftNode.physicsBody?.friction = 0
 
         let boxRight = SCNBox(width: 1, height: 13, length: 13, chamferRadius: 0.2)
-        boxRight.firstMaterial?.diffuse.contents = UIColor.blue
+        boxRight.firstMaterial?.diffuse.contents = UIColor.white
         let boxRightNode = SCNNode(geometry: boxRight)
         scene.rootNode.addChildNode(boxRightNode)
         boxRightNode.position = SCNVector3(x: 7, y: 5, z: 1)
@@ -73,7 +73,7 @@ class GameViewController: UIViewController {
         boxRightNode.physicsBody?.friction = 0
 
         let boxBack = SCNBox(width: 12, height: 13, length: 1, chamferRadius: 0.2)
-        boxBack.firstMaterial?.diffuse.contents = UIColor.blue
+        boxBack.firstMaterial?.diffuse.contents = UIColor.white
         let boxBackNode = SCNNode(geometry: boxBack)
         scene.rootNode.addChildNode(boxBackNode)
         boxBackNode.position = SCNVector3(x: 1, y: 5, z: -5)
@@ -82,7 +82,7 @@ class GameViewController: UIViewController {
         boxBackNode.physicsBody?.friction = 0
 
         let boxFront = SCNBox(width: 12, height: 13, length: 1, chamferRadius: 0.2)
-        boxFront.firstMaterial?.diffuse.contents = UIColor.blue
+        boxFront.firstMaterial?.diffuse.contents = UIColor.white
         let boxFrontNode = SCNNode(geometry: boxFront)
         scene.rootNode.addChildNode(boxFrontNode)
         boxFrontNode.position = SCNVector3(x: 1, y: 5, z: 7)
