@@ -3,12 +3,12 @@ import QuartzCore
 import SceneKit
 
 class GameViewController: UIViewController {
-
+    let scene = SCNScene(named: "art.scnassets/ship.scn")!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
@@ -32,10 +32,84 @@ class GameViewController: UIViewController {
         ambientLightNode.light!.color = UIColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
         
+        boxSetUp()
+        
         // retrieve the ship node
         let ball = scene.rootNode.childNode(withName: "ball", recursively: false)
         ball?.physicsBody?.velocity = SCNVector3(x: 10, y: -30, z: 10)
         
+        
+
+        
+        // retrieve the SCNView
+        let sceneView = self.view as! SCNView
+        
+        // set the scene to the view
+        sceneView.scene = scene
+        
+        // allows the user to manipulate the camera
+        sceneView.allowsCameraControl = true
+        
+        // show statistics such as fps and timing information
+        sceneView.showsStatistics = true
+        
+        // configure the view
+        sceneView.backgroundColor = UIColor.black
+        
+        // add a tap gesture recognizer
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        sceneView.addGestureRecognizer(tapGesture)
+        
+        //add a pan (drag) gesture recognizer
+        /*let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanning(pan:)))
+        sceneView.addGestureRecognizer(panGesture)*/
+    }
+    
+    @objc func handlePanning(pan: UIPanGestureRecognizer) {
+        let sceneView = self.view as! SCNView
+        let touchPoint = pan.location(in: sceneView)
+      
+    }
+    
+    @objc
+    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+        // retrieve the SCNView
+        let scnView = self.view as! SCNView
+        
+        // check what nodes are tapped
+        let p = gestureRecognize.location(in: scnView)
+        let hitResults = scnView.hitTest(p, options: [:])
+        // check that we clicked on at least one object
+        if hitResults.count > 0 {
+            // retrieved the first clicked object
+            let result = hitResults[0]
+            
+            // get its material
+            let material = result.node.geometry!.firstMaterial!
+            
+            // highlight it
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0.5
+            
+            // on completion - unhighlight
+            SCNTransaction.completionBlock = {
+                SCNTransaction.begin()
+                SCNTransaction.animationDuration = 0.5
+                
+                material.emission.contents = UIColor.black
+                
+                SCNTransaction.commit()
+            }
+            
+            material.emission.contents = UIColor.red
+            
+            SCNTransaction.commit()
+        }
+    }
+    
+    
+    func boxSetUp() {
+        /*
         let boxBottom = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
         boxBottom.firstMaterial?.diffuse.contents = UIColor.blue
         let boxBottomNode = SCNNode(geometry: boxBottom)
@@ -43,7 +117,12 @@ class GameViewController: UIViewController {
         boxBottomNode.position = SCNVector3(x: 1, y: -2, z: 1)
         boxBottomNode.physicsBody = SCNPhysicsBody.static()
         boxBottomNode.physicsBody?.restitution = 1.0
-        boxBottomNode.physicsBody?.friction = 0
+        boxBottomNode.physicsBody?.friction = 0*/
+        let bouncer = SCNPlane(width: 5, height: 5)
+        bouncer.firstMaterial?.diffuse.contents = UIColor.green
+        let bouncerNode = SCNNode(geometry: bouncer)
+        scene.rootNode.addChildNode(bouncerNode)
+        bouncerNode.eulerAngles = SCNVector3(x: 45, y: 0, z: 0)
 
         let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
         boxTop.firstMaterial?.diffuse.contents = UIColor.blue
@@ -90,65 +169,8 @@ class GameViewController: UIViewController {
         boxFrontNode.physicsBody?.restitution = 1.0
         boxFrontNode.opacity = 0.4
         boxFrontNode.physicsBody?.friction = 0
-
-        // animate the 3d object
-       //room.physicsBody?.applyForce(SCNVector3(x: 0, y: 20, z: 0), asImpulse: true) //room.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
-        
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
-        // set the scene to the view
-        scnView.scene = scene
-        
-        // allows the user to manipulate the camera
-        scnView.allowsCameraControl = true
-        
-        // show statistics such as fps and timing information
-        scnView.showsStatistics = true
-        
-        // configure the view
-        scnView.backgroundColor = UIColor.black
-        
-        // add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        scnView.addGestureRecognizer(tapGesture)
     }
     
-    @objc
-    func handleTap(_ gestureRecognize: UIGestureRecognizer) {
-        // retrieve the SCNView
-        let scnView = self.view as! SCNView
-        
-        // check what nodes are tapped
-        let p = gestureRecognize.location(in: scnView)
-        let hitResults = scnView.hitTest(p, options: [:])
-        // check that we clicked on at least one object
-        if hitResults.count > 0 {
-            // retrieved the first clicked object
-            let result = hitResults[0]
-            
-            // get its material
-            let material = result.node.geometry!.firstMaterial!
-            
-            // highlight it
-            SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.5
-            
-            // on completion - unhighlight
-            SCNTransaction.completionBlock = {
-                SCNTransaction.begin()
-                SCNTransaction.animationDuration = 0.5
-                
-                material.emission.contents = UIColor.black
-                
-                SCNTransaction.commit()
-            }
-            
-            material.emission.contents = UIColor.red
-            
-            SCNTransaction.commit()
-        }
-    }
     
     override var shouldAutorotate: Bool {
         return true
