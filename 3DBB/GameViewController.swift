@@ -1,9 +1,20 @@
 import UIKit
 import QuartzCore
 import SceneKit
+import Foundation
 
 class GameViewController: UIViewController {
     let scene = SCNScene(named: "art.scnassets/ship.scn")!
+    var bouncer: SCNNode
+    
+    required init(coder decoder: NSCoder) {
+        let bouncerGeom = SCNPlane(width: 5, height: 5)
+        bouncerGeom.firstMaterial?.isDoubleSided = true
+        bouncerGeom.firstMaterial?.diffuse.contents = UIColor.green
+        let bouncerNode = SCNNode(geometry: bouncerGeom)
+        self.bouncer = bouncerNode
+        super.init(coder: decoder)!
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +47,8 @@ class GameViewController: UIViewController {
         
         // retrieve the ship node
         let ball = scene.rootNode.childNode(withName: "ball", recursively: false)
-        ball?.physicsBody?.velocity = SCNVector3(x: 10, y: -30, z: 10)
+        //ball?.physicsBody?.restitution = 1.1
+        ball?.physicsBody?.velocity = SCNVector3(x: 5, y: -15, z: 5)
         
         
 
@@ -48,7 +60,7 @@ class GameViewController: UIViewController {
         sceneView.scene = scene
         
         // allows the user to manipulate the camera
-        sceneView.allowsCameraControl = true
+        sceneView.allowsCameraControl = false
         
         // show statistics such as fps and timing information
         sceneView.showsStatistics = true
@@ -61,14 +73,17 @@ class GameViewController: UIViewController {
         sceneView.addGestureRecognizer(tapGesture)
         
         //add a pan (drag) gesture recognizer
-        /*let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanning(pan:)))
-        sceneView.addGestureRecognizer(panGesture)*/
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanning(pan:)))
+        sceneView.addGestureRecognizer(panGesture)
     }
     
     @objc func handlePanning(pan: UIPanGestureRecognizer) {
         let sceneView = self.view as! SCNView
-        let touchPoint = pan.location(in: sceneView)
-      
+        //let touchPoint = pan.location(in: sceneView)
+        let xPan = pan.velocity(in: sceneView).x
+        scene.rootNode.childNode(withName: "bouncer", recursively: false)!.runAction(SCNAction.moveBy(x: xPan/1000, y: 0, z: 0, duration: 0.1))
+        let zPan = pan.velocity(in: sceneView).y
+        scene.rootNode.childNode(withName: "bouncer", recursively: false)!.runAction(SCNAction.moveBy(x: 0, y: 0, z: zPan/1000, duration: 0.1))
     }
     
     @objc
@@ -118,11 +133,14 @@ class GameViewController: UIViewController {
         boxBottomNode.physicsBody = SCNPhysicsBody.static()
         boxBottomNode.physicsBody?.restitution = 1.0
         boxBottomNode.physicsBody?.friction = 0*/
-        let bouncer = SCNPlane(width: 5, height: 5)
-        bouncer.firstMaterial?.diffuse.contents = UIColor.green
-        let bouncerNode = SCNNode(geometry: bouncer)
-        scene.rootNode.addChildNode(bouncerNode)
-        bouncerNode.eulerAngles = SCNVector3(x: 45, y: 0, z: 0)
+        
+        
+        scene.rootNode.addChildNode(bouncer)
+        bouncer.name = "bouncer"
+        bouncer.eulerAngles = SCNVector3(x: Float(Double.pi / -2), y: 0, z: 0)
+        bouncer.position = SCNVector3(x: 1, y: -2, z: 1)
+        bouncer.physicsBody = SCNPhysicsBody.static()
+        bouncer.physicsBody?.restitution = 1
 
         let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
         boxTop.firstMaterial?.diffuse.contents = UIColor.blue
@@ -130,7 +148,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(boxTopNode)
         boxTopNode.position = SCNVector3(x: 1, y: 12, z: 1)
         boxTopNode.physicsBody = SCNPhysicsBody.static()
-        boxTopNode.physicsBody?.restitution = 1.0
+        boxTopNode.physicsBody?.restitution = 1
         boxTopNode.physicsBody?.friction = 0
 
         let boxLeft = SCNBox(width: 1, height: 13, length: 13, chamferRadius: 0.2)
@@ -139,7 +157,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(boxLeftNode)
         boxLeftNode.position = SCNVector3(x: -5, y: 5, z: 1)
         boxLeftNode.physicsBody = SCNPhysicsBody.static()
-        boxLeftNode.physicsBody?.restitution = 1.0
+        boxLeftNode.physicsBody?.restitution = 1
         boxLeftNode.physicsBody?.friction = 0
 
         let boxRight = SCNBox(width: 1, height: 13, length: 13, chamferRadius: 0.2)
@@ -148,7 +166,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(boxRightNode)
         boxRightNode.position = SCNVector3(x: 7, y: 5, z: 1)
         boxRightNode.physicsBody = SCNPhysicsBody.static()
-        boxRightNode.physicsBody?.restitution = 1.0
+        boxRightNode.physicsBody?.restitution = 1
         boxRightNode.physicsBody?.friction = 0
 
         let boxBack = SCNBox(width: 12, height: 13, length: 1, chamferRadius: 0.2)
@@ -157,7 +175,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(boxBackNode)
         boxBackNode.position = SCNVector3(x: 1, y: 5, z: -5)
         boxBackNode.physicsBody = SCNPhysicsBody.static()
-        boxBackNode.physicsBody?.restitution = 1.0
+        boxBackNode.physicsBody?.restitution = 1
         boxBackNode.physicsBody?.friction = 0
 
         let boxFront = SCNBox(width: 12, height: 13, length: 1, chamferRadius: 0.2)
@@ -166,8 +184,8 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(boxFrontNode)
         boxFrontNode.position = SCNVector3(x: 1, y: 5, z: 7)
         boxFrontNode.physicsBody = SCNPhysicsBody.static()
-        boxFrontNode.physicsBody?.restitution = 1.0
-        boxFrontNode.opacity = 0.4
+        boxFrontNode.physicsBody?.restitution = 1
+        boxFrontNode.opacity = 0
         boxFrontNode.physicsBody?.friction = 0
     }
     
