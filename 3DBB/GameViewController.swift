@@ -27,22 +27,24 @@ class GameViewController: UIViewController {
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = .omni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 15)
+        lightNode.position = SCNVector3(x: 5.5, y: 7.5, z: 20)
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
+        
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = .ambient
-        ambientLightNode.light!.color = UIColor.darkGray
+        ambientLightNode.light!.color = UIColor(white: 0.67, alpha: 1.0)
         scene.rootNode.addChildNode(ambientLightNode)
+ 
         
         boxSetUp()
         brickSetUp()
         
         // retrieve the ball node
         let ball = scene.rootNode.childNode(withName: "ball", recursively: false)
-        ball?.physicsBody?.velocity = SCNVector3(x: 5, y: -15, z: 5)
+        ball?.physicsBody?.velocity = SCNVector3(x: 5, y: 15, z: 5)
 
         // retrieve the SCNView
         let sceneView = self.view as! SCNView
@@ -51,7 +53,7 @@ class GameViewController: UIViewController {
         sceneView.scene = scene
         
         // allows the user to manipulate the camera
-        sceneView.allowsCameraControl = false
+        sceneView.allowsCameraControl = true
         
         // show statistics such as fps and timing information
         sceneView.showsStatistics = true
@@ -65,23 +67,21 @@ class GameViewController: UIViewController {
         
         //add a pan (drag) gesture recognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanning(pan:)))
-        sceneView.addGestureRecognizer(panGesture)
+        //sceneView.addGestureRecognizer(panGesture)
     }
     
+    //bottom left front corner of the "room" is (0,0,0)
+    //the room is 11x18x13 (x,y,z), bricks are 1x1x1
+    func brickSetUp() {
+        scene.rootNode.addChildNode(generateBrick(x: 5, y: 12, z: -5))
+        scene.rootNode.addChildNode(generateBrick(x: 6, y: 12, z: -5))
+        scene.rootNode.addChildNode(generateBrick(x: 5, y: 12, z: -6))
+        scene.rootNode.addChildNode(generateBrick(x: 6, y: 12, z: -6))
+    }
     
     //bottom left front corner of the "room" is (0,0,0)
     func boxSetUp() {
-        /*
-        let boxBottom = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
-        boxBottom.firstMaterial?.diffuse.contents = UIColor.blue
-        let boxBottomNode = SCNNode(geometry: boxBottom)
-        scene.rootNode.addChildNode(boxBottomNode)
-        boxBottomNode.position = SCNVector3(x: 1, y: -2, z: 1)
-        boxBottomNode.physicsBody = SCNPhysicsBody.static()
-        boxBottomNode.physicsBody?.restitution = 1.0
-        boxBottomNode.physicsBody?.friction = 0*/
-        
-        let bouncerGeom = SCNPlane(width: 5, height: 5)
+        let bouncerGeom = SCNPlane(width: 3, height: 3)
         bouncerGeom.firstMaterial?.isDoubleSided = true
         bouncerGeom.firstMaterial?.diffuse.contents = UIColor.green
         let bouncerNode = SCNNode(geometry: bouncerGeom)
@@ -92,7 +92,7 @@ class GameViewController: UIViewController {
         bouncerNode.physicsBody = SCNPhysicsBody.static()
         bouncerNode.physicsBody?.restitution = 1
 
-        let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
+        let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0)
         boxTop.firstMaterial?.diffuse.contents = UIColor.blue
         let boxTopNode = SCNNode(geometry: boxTop)
         scene.rootNode.addChildNode(boxTopNode)
@@ -101,7 +101,7 @@ class GameViewController: UIViewController {
         boxTopNode.physicsBody?.restitution = 1
         boxTopNode.physicsBody?.friction = 0
 
-        let boxLeft = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0.2)
+        let boxLeft = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
         boxLeft.firstMaterial?.diffuse.contents = UIColor.blue
         let boxLeftNode = SCNNode(geometry: boxLeft)
         scene.rootNode.addChildNode(boxLeftNode)
@@ -110,7 +110,7 @@ class GameViewController: UIViewController {
         boxLeftNode.physicsBody?.restitution = 1
         boxLeftNode.physicsBody?.friction = 0
 
-        let boxRight = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0.2)
+        let boxRight = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
         boxRight.firstMaterial?.diffuse.contents = UIColor.blue
         let boxRightNode = SCNNode(geometry: boxRight)
         scene.rootNode.addChildNode(boxRightNode)
@@ -119,7 +119,7 @@ class GameViewController: UIViewController {
         boxRightNode.physicsBody?.restitution = 1
         boxRightNode.physicsBody?.friction = 0
 
-        let boxBack = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0.2)
+        let boxBack = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
         boxBack.firstMaterial?.diffuse.contents = UIColor.blue
         let boxBackNode = SCNNode(geometry: boxBack)
         scene.rootNode.addChildNode(boxBackNode)
@@ -128,7 +128,7 @@ class GameViewController: UIViewController {
         boxBackNode.physicsBody?.restitution = 1
         boxBackNode.physicsBody?.friction = 0
 
-        let boxFront = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0.2)
+        let boxFront = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
         boxFront.firstMaterial?.diffuse.contents = UIColor.blue
         let boxFrontNode = SCNNode(geometry: boxFront)
         scene.rootNode.addChildNode(boxFrontNode)
@@ -139,16 +139,9 @@ class GameViewController: UIViewController {
         boxFrontNode.physicsBody?.friction = 0
     }
     
-    //bottom left front corner of the "room" is (0,0,0)
-    func brickSetUp() {
-        scene.rootNode.addChildNode(generateBrick(x: 1, y: 4, z: 12))
-        scene.rootNode.addChildNode(generateBrick(x: 1.5, y: 4, z: 12))
-        scene.rootNode.addChildNode(generateBrick(x: 1, y: 4, z: 11.5))
-        scene.rootNode.addChildNode(generateBrick(x: 1.5, y: 4, z: 11.5))
-    }
     
     func generateBrick(x: Float, y: Float, z: Float)-> SCNNode {
-        let brickGeom = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
+        let brickGeom = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0.15)
         brickGeom.firstMaterial?.diffuse.contents = UIColor.purple
         let newBrick = SCNNode(geometry: brickGeom)
         newBrick.physicsBody = SCNPhysicsBody.static()
