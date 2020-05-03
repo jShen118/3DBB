@@ -39,13 +39,13 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(ambientLightNode)
  
         
-        boxSetUp()
+        boxSetUp(bouncerType: .semisphere)
         brickSetUp()
         
         // retrieve the ball node
         let ball = scene.rootNode.childNode(withName: "ball", recursively: false)
         ball?.physicsBody?.velocity = SCNVector3(x: 5, y: 15, z: 5)
-
+        
         // retrieve the SCNView
         let sceneView = self.view as! SCNView
         
@@ -67,7 +67,7 @@ class GameViewController: UIViewController {
         
         //add a pan (drag) gesture recognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanning(pan:)))
-        //sceneView.addGestureRecognizer(panGesture)
+        sceneView.addGestureRecognizer(panGesture)
     }
     
     //Coordinate system convention: a brick flush at the bottom left front corner of the room as (1,1,-1), opposite corner is (11, 18, -12)
@@ -87,18 +87,21 @@ class GameViewController: UIViewController {
     }
     
     //bottom left front corner of the "room" is (0,0,0)
-    func boxSetUp() {
-        let bouncerGeom = SCNPlane(width: 3, height: 3)
+    func boxSetUp(bouncerType: BouncerType) {
+        var bouncerGeom: SCNGeometry = SCNPlane(width: 3, height: 3)
+        if bouncerType == .pyramid {bouncerGeom = SCNPyramid(width: 3, height: 1, length: 3)}
+        if bouncerType == .semisphere {bouncerGeom = SCNSphere(radius: 1.5)}
+        
         bouncerGeom.firstMaterial?.isDoubleSided = true
         bouncerGeom.firstMaterial?.diffuse.contents = UIColor.green
         let bouncerNode = SCNNode(geometry: bouncerGeom)
         scene.rootNode.addChildNode(bouncerNode)
         bouncerNode.name = "bouncer"
-        bouncerNode.eulerAngles = SCNVector3(x: Float(Double.pi / -2), y: 0, z: 0)
+        if bouncerType == .plane {bouncerNode.eulerAngles = SCNVector3(x: Float(Double.pi / -2), y: 0, z: 0)}
         bouncerNode.position = SCNVector3(x: 5.5, y: 0, z: -6.5)
         bouncerNode.physicsBody = SCNPhysicsBody.static()
         bouncerNode.physicsBody?.restitution = 1
-
+        
         let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0)
         boxTop.firstMaterial?.diffuse.contents = UIColor.blue
         let boxTopNode = SCNNode(geometry: boxTop)
