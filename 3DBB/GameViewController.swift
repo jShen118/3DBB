@@ -21,7 +21,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 5.5, y: 7.5, z: 20)
+        cameraNode.position = SCNVector3(x: 5.5, y: 8, z: 17.5)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -70,13 +70,20 @@ class GameViewController: UIViewController {
         //sceneView.addGestureRecognizer(panGesture)
     }
     
-    //bottom left front corner of the "room" is (0,0,0)
-    //the room is 11x18x13 (x,y,z), bricks are 1x1x1
+    //Coordinate system convention: a brick flush at the bottom left front corner of the room as (1,1,-1), opposite corner is (11, 18, -12)
+    //the room is 11x18x12, bricks are 1x1x1
     func brickSetUp() {
-        scene.rootNode.addChildNode(generateBrick(x: 5, y: 12, z: -5))
-        scene.rootNode.addChildNode(generateBrick(x: 6, y: 12, z: -5))
-        scene.rootNode.addChildNode(generateBrick(x: 5, y: 12, z: -6))
-        scene.rootNode.addChildNode(generateBrick(x: 6, y: 12, z: -6))
+        //insertBrick(x: 1, y: 1, z: -1)
+        //insertBrick(x: 11, y: 18, z: -12)
+        insertBrickLayout(brickCoors: BrickLayouts.layout_1)
+    }
+    
+    func insertBrickLayout(brickCoors: [SCNVector3]) {
+        for c in brickCoors {insertBrick(x: c.x, y: c.y, z: c.z)}
+    }
+    
+    func insertBrick(x: Float, y: Float, z: Float) {
+        scene.rootNode.addChildNode(generateBrick(x: x-0.5, y: y-0.5, z: z+0.5))
     }
     
     //bottom left front corner of the "room" is (0,0,0)
