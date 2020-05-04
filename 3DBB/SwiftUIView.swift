@@ -11,7 +11,7 @@ import SwiftUI
 struct SwiftUIView : UIViewRepresentable {
 
     func makeUIView(context: Context) -> UIView {
-        return UIStoryboard(name: "LaunchScreen", bundle: Bundle.main).instantiateInitialViewController()!.view
+        return UIStoryboard(name: "Main.storyboard", bundle: Bundle.main).instantiateInitialViewController()!.view
     }
 
     func updateUIView(_ view: UIView, context: Context) {

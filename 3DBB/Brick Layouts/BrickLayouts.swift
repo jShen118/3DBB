@@ -10,13 +10,14 @@ import Foundation
 import SceneKit
 
 struct BrickLayouts {
-    static let layout_1: [SCNVector3] = fill(x1: 4, x2: 8, y1: 12, y2: 15, z1: -3, z2: -6)
+    
+    static let layout_1: BrickLayout = BrickLayout(breakable: fill(x1: 4, x2: 8, y1: 12, y2: 15, z1: -3, z2: -6), unbreakable: fill(x1: 3, x2: 3, y1: 12, y2: 15, z1: -3, z2: -6))
     
     
     
 }
 
-//fills a defined space full of bricks. x2 should be bigger than x1, y2 should be bigger than y1, and IMPORTANT: z1 should be bigger than z2
+//fills a defined space full of bricks. x2 should be bigger than or equal to x1, y2 should be bigger than or equal to y1, and IMPORTANT: z1 should be bigger than or equal to z2
 func fill(x1: Int, x2: Int, y1: Int, y2: Int, z1: Int, z2: Int)->[SCNVector3] {
     var toRet = Array(repeating: SCNVector3(x: 0, y: 0, z: 0), count: (x2 - x1 + 1)*(y2 - y1 + 1)*(z1 - z2 + 1))
     var index = 0
