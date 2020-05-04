@@ -68,6 +68,7 @@ class GameViewController: UIViewController {
         //add a pan (drag) gesture recognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanning(pan:)))
         sceneView.addGestureRecognizer(panGesture)
+        
     }
     
     //Coordinate system convention: a brick flush at the bottom left front corner of the room as (1,1,-1), opposite corner is (11, 18, -12)
