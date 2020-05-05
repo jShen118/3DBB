@@ -11,7 +11,7 @@ import SceneKit
 
 struct BrickLayouts {
     
-    static let layout_1: BrickLayout = BrickLayout(breakable: fill(x1: 4, x2: 8, y1: 12, y2: 15, z1: -3, z2: -6), unbreakable: fill(x1: 3, x2: 3, y1: 12, y2: 15, z1: -3, z2: -6))
+    static let layout_1: BrickLayout = BrickLayout(breakable: fill(x1: 4, x2: 8, y1: 12, y2: 15, z1: -3, z2: -6), unbreakable: fill(x1: 3, x2: 3, y1: 12, y2: 15, z1: -3, z2: -6) + fill(x1: 9, x2: 9, y1: 12, y2: 15, z1: -3, z2: -6))
     
     
     

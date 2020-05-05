@@ -60,7 +60,7 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
         sceneView.allowsCameraControl = true
         
         // show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
         
         // configure the view
         sceneView.backgroundColor = UIColor.black
@@ -111,7 +111,7 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
     
     //bottom left front corner of the "room" is (0,0,0)
     func boxSetUp(bouncerType: BouncerType) {
-        var bouncerGeom: SCNGeometry = SCNPlane(width: 10, height: 10)
+        var bouncerGeom: SCNGeometry = SCNPlane(width: 3, height: 3)
         if bouncerType == .pyramid {bouncerGeom = SCNPyramid(width: 3, height: 1, length: 3)}
         if bouncerType == .semisphere {bouncerGeom = SCNSphere(radius: 1.5)}
         
