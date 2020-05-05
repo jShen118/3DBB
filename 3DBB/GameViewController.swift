@@ -60,7 +60,7 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
         sceneView.allowsCameraControl = true
         
         // show statistics such as fps and timing information
-        sceneView.showsStatistics = false
+        sceneView.showsStatistics = true
         
         // configure the view
         sceneView.backgroundColor = UIColor.black
