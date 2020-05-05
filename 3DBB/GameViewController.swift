@@ -2,9 +2,11 @@ import UIKit
 import QuartzCore
 import SceneKit
 import Foundation
+import SwiftUI
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, SCNPhysicsContactDelegate {
     let scene = SCNScene(named: "art.scnassets/ball.scn")!
+    let ballCategoryBitMask = 1
     
     required init(coder decoder: NSCoder) {
         super.init(coder: decoder)!
@@ -21,29 +23,33 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 5.5, y: 7.5, z: 20)
+        cameraNode.position = SCNVector3(x: 5.5, y: 8, z: 17.5)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = .omni
-        lightNode.position = SCNVector3(x: 0, y: 10, z: 15)
+        lightNode.position = SCNVector3(x: 5.5, y: 7.5, z: 20)
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
+        
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = .ambient
-        ambientLightNode.light!.color = UIColor.darkGray
+        ambientLightNode.light!.color = UIColor(white: 0.67, alpha: 1.0)
         scene.rootNode.addChildNode(ambientLightNode)
+ 
         
-        boxSetUp()
+        boxSetUp(bouncerType: .plane)
         brickSetUp()
         
         // retrieve the ball node
         let ball = scene.rootNode.childNode(withName: "ball", recursively: false)
-        ball?.physicsBody?.velocity = SCNVector3(x: 5, y: -15, z: 5)
-
+        ball?.physicsBody?.velocity = SCNVector3(x: 5, y: 15, z: 5)
+        ball?.physicsBody?.categoryBitMask = ballCategoryBitMask
+        scene.physicsWorld.contactDelegate = self
+        
         // retrieve the SCNView
         let sceneView = self.view as! SCNView
         
@@ -51,10 +57,10 @@ class GameViewController: UIViewController {
         sceneView.scene = scene
         
         // allows the user to manipulate the camera
-        sceneView.allowsCameraControl = false
+        sceneView.allowsCameraControl = true
         
         // show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
         
         // configure the view
         sceneView.backgroundColor = UIColor.black
@@ -66,34 +72,61 @@ class GameViewController: UIViewController {
         //add a pan (drag) gesture recognizer
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanning(pan:)))
         sceneView.addGestureRecognizer(panGesture)
+        
     }
     
+    //Coordinate system convention: a brick flush at the bottom left front corner of the room as (1,1,-1), opposite corner is (11, 18, -12)
+    //the room is 11x18x12, bricks are 1x1x1
+    func brickSetUp() {
+        //insertBrick(x: 1, y: 1, z: -1)
+        //insertBrick(x: 11, y: 18, z: -12)
+        insertBrickLayout(layout: BrickLayouts.layout_1)
+    }
+    
+    func insertBrickLayout(layout: BrickLayout) {
+        for b in layout.breakableBricks {insertBrick(x: b.x, y: b.y, z: b.z, type: .breakable)}
+        for b in layout.unbreakableBricks {insertBrick(x: b.x, y: b.y, z: b.z, type: .unbreakable)}
+    }
+    
+    func insertBrick(x: Float, y: Float, z: Float, type: BrickType) {
+        scene.rootNode.addChildNode(generateBrick(x: x-0.5, y: y-0.5, z: z+0.5, type: type))
+    }
+    
+    func generateBrick(x: Float, y: Float, z: Float, type: BrickType)-> SCNNode {
+        let brickGeom = SCNBox(width: 1, height: 1, length: 1, chamferRadius: 0.15)
+        if type == .breakable {
+            brickGeom.firstMaterial?.diffuse.contents = UIColor.purple
+        } else {brickGeom.firstMaterial?.diffuse.contents = UIColor.gray}
+        let newBrick = SCNNode(geometry: brickGeom)
+        newBrick.name = "brick"
+        newBrick.physicsBody = SCNPhysicsBody.static()
+        newBrick.physicsBody?.restitution = 1
+        if type == .breakable {
+            
+        }
+        newBrick.physicsBody?.contactTestBitMask = ballCategoryBitMask
+        newBrick.position = SCNVector3(x: x, y: y, z: z)
+        return newBrick
+    }
     
     //bottom left front corner of the "room" is (0,0,0)
-    func boxSetUp() {
-        /*
-        let boxBottom = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
-        boxBottom.firstMaterial?.diffuse.contents = UIColor.white
-        let boxBottomNode = SCNNode(geometry: boxBottom)
-        scene.rootNode.addChildNode(boxBottomNode)
-        boxBottomNode.position = SCNVector3(x: 1, y: -2, z: 1)
-        boxBottomNode.physicsBody = SCNPhysicsBody.static()
-        boxBottomNode.physicsBody?.restitution = 1.0
-        boxBottomNode.physicsBody?.friction = 0*/
+    func boxSetUp(bouncerType: BouncerType) {
+        var bouncerGeom: SCNGeometry = SCNPlane(width: 3, height: 3)
+        if bouncerType == .pyramid {bouncerGeom = SCNPyramid(width: 3, height: 1, length: 3)}
+        if bouncerType == .semisphere {bouncerGeom = SCNSphere(radius: 1.5)}
         
-        let bouncerGeom = SCNPlane(width: 5, height: 5)
         bouncerGeom.firstMaterial?.isDoubleSided = true
         bouncerGeom.firstMaterial?.diffuse.contents = UIColor.green
         let bouncerNode = SCNNode(geometry: bouncerGeom)
         scene.rootNode.addChildNode(bouncerNode)
         bouncerNode.name = "bouncer"
-        bouncerNode.eulerAngles = SCNVector3(x: Float(Double.pi / -2), y: 0, z: 0)
+        if bouncerType == .plane {bouncerNode.eulerAngles = SCNVector3(x: Float(Double.pi / -2), y: 0, z: 0)}
         bouncerNode.position = SCNVector3(x: 5.5, y: 0, z: -6.5)
         bouncerNode.physicsBody = SCNPhysicsBody.static()
         bouncerNode.physicsBody?.restitution = 1
-
-        let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0.2)
-        boxTop.firstMaterial?.diffuse.contents = UIColor.white
+        
+        let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0)
+        boxTop.firstMaterial?.diffuse.contents = UIColor.blue
         let boxTopNode = SCNNode(geometry: boxTop)
         scene.rootNode.addChildNode(boxTopNode)
         boxTopNode.position = SCNVector3(x: 5.5, y: 18.5, z: -6.5)
@@ -101,8 +134,8 @@ class GameViewController: UIViewController {
         boxTopNode.physicsBody?.restitution = 1
         boxTopNode.physicsBody?.friction = 0
 
-        let boxLeft = SCNBox(width: 1, height: 13, length: 13, chamferRadius: 0.2)
-        boxLeft.firstMaterial?.diffuse.contents = UIColor.white
+        let boxLeft = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
+        boxLeft.firstMaterial?.diffuse.contents = UIColor.blue
         let boxLeftNode = SCNNode(geometry: boxLeft)
         scene.rootNode.addChildNode(boxLeftNode)
         boxLeftNode.position = SCNVector3(x: -0.5, y: 9, z: -6.5)
@@ -110,8 +143,8 @@ class GameViewController: UIViewController {
         boxLeftNode.physicsBody?.restitution = 1
         boxLeftNode.physicsBody?.friction = 0
 
-        let boxRight = SCNBox(width: 1, height: 13, length: 13, chamferRadius: 0.2)
-        boxRight.firstMaterial?.diffuse.contents = UIColor.white
+        let boxRight = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
+        boxRight.firstMaterial?.diffuse.contents = UIColor.blue
         let boxRightNode = SCNNode(geometry: boxRight)
         scene.rootNode.addChildNode(boxRightNode)
         boxRightNode.position = SCNVector3(x: 11.5, y: 9, z: -6.5)
@@ -119,8 +152,8 @@ class GameViewController: UIViewController {
         boxRightNode.physicsBody?.restitution = 1
         boxRightNode.physicsBody?.friction = 0
 
-        let boxBack = SCNBox(width: 12, height: 13, length: 1, chamferRadius: 0.2)
-        boxBack.firstMaterial?.diffuse.contents = UIColor.white
+        let boxBack = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
+        boxBack.firstMaterial?.diffuse.contents = UIColor.blue
         let boxBackNode = SCNNode(geometry: boxBack)
         scene.rootNode.addChildNode(boxBackNode)
         boxBackNode.position = SCNVector3(x: 5.5, y: 9, z: -12.5)
@@ -128,8 +161,8 @@ class GameViewController: UIViewController {
         boxBackNode.physicsBody?.restitution = 1
         boxBackNode.physicsBody?.friction = 0
 
-        let boxFront = SCNBox(width: 12, height: 13, length: 1, chamferRadius: 0.2)
-        boxFront.firstMaterial?.diffuse.contents = UIColor.white
+        let boxFront = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
+        boxFront.firstMaterial?.diffuse.contents = UIColor.blue
         let boxFrontNode = SCNNode(geometry: boxFront)
         scene.rootNode.addChildNode(boxFrontNode)
         boxFrontNode.position = SCNVector3(x: 5.5, y: 9, z: -0.5)
@@ -137,24 +170,6 @@ class GameViewController: UIViewController {
         boxFrontNode.physicsBody?.restitution = 1
         boxFrontNode.opacity = 0
         boxFrontNode.physicsBody?.friction = 0
-    }
-    
-    //bottom left front corner of the "room" is (0,0,0)
-    func brickSetUp() {
-        scene.rootNode.addChildNode(generateBrick(x: 1, y: 4, z: 12))
-        scene.rootNode.addChildNode(generateBrick(x: 1.5, y: 4, z: 12))
-        scene.rootNode.addChildNode(generateBrick(x: 1, y: 4, z: 11.5))
-        scene.rootNode.addChildNode(generateBrick(x: 1.5, y: 4, z: 11.5))
-    }
-    
-    func generateBrick(x: Float, y: Float, z: Float)-> SCNNode {
-        let brickGeom = SCNBox(width: 0.5, height: 0.5, length: 0.5, chamferRadius: 0)
-        brickGeom.firstMaterial?.diffuse.contents = UIColor.purple
-        let newBrick = SCNNode(geometry: brickGeom)
-        newBrick.physicsBody = SCNPhysicsBody.static()
-        newBrick.physicsBody?.restitution = 1
-        newBrick.position = SCNVector3(x: x, y: y, z: z)
-        return newBrick
     }
     
     //isInBounds not working rn
@@ -227,4 +242,9 @@ class GameViewController: UIViewController {
         }
     }
 
+    //nodeA should always be ball, nodeB should always be brick
+    func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
+        //print("\(contact.nodeA.name), \(contact.nodeB.name)")
+        contact.nodeB.geometry?.firstMaterial?.diffuse.contents = UIColor.black
+    }
 }
