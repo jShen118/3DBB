@@ -101,9 +101,6 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
         newBrick.name = "brick"
         newBrick.physicsBody = SCNPhysicsBody.static()
         newBrick.physicsBody?.restitution = 1
-        if type == .breakable {
-            
-        }
         newBrick.physicsBody?.contactTestBitMask = ballCategoryBitMask
         newBrick.position = SCNVector3(x: x, y: y, z: z)
         return newBrick
@@ -245,9 +242,14 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
     //nodeA should always be ball, nodeB should always be brick
     func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
         //print("\(contact.nodeA.name), \(contact.nodeB.name)")
-        if contact.nodeB.geometry?.firstMaterial?.diffuse.contents == UIColor.purple {
-            
+        let brickColor = contact.nodeB.geometry?.firstMaterial?.diffuse.contents as! UIColor
+        switch brickColor {
+            case UIColor.gray: grayBrickHit()
+            case UIColor.purple: contact.nodeB.geometry?.firstMaterial?.diffuse.contents = UIColor(red: 0.7, green: 0.0, blue: 0.3, alpha: 1.0)
+            case UIColor(red: 0.7, green: 0.0, blue: 0.3, alpha: 1.0): contact.nodeB.geometry?.firstMaterial?.diffuse.contents = UIColor(red: 0.9, green: 0.0, blue: 0.0, alpha: 1.0)
+            default: contact.nodeB.removeFromParentNode()
         }
-        contact.nodeB.geometry?.firstMaterial?.diffuse.contents = UIColor.black
     }
+    
+    func grayBrickHit() {}
 }
