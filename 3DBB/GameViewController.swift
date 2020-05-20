@@ -245,6 +245,9 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
     //nodeA should always be ball, nodeB should always be brick
     func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
         //print("\(contact.nodeA.name), \(contact.nodeB.name)")
+        if contact.nodeB.geometry?.firstMaterial?.diffuse.contents == UIColor.purple {
+            
+        }
         contact.nodeB.geometry?.firstMaterial?.diffuse.contents = UIColor.black
     }
 }
