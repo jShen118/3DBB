@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		5B20E106245F29D3009BCBDA /* BrickLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B20E105245F29D3009BCBDA /* BrickLayouts.swift */; };
 		5B20E108245F724E009BCBDA /* BouncerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B20E107245F724E009BCBDA /* BouncerType.swift */; };
-		5B20E11024605F2E009BCBDA /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B20E10F24605F2E009BCBDA /* SwiftUIView.swift */; };
 		5B20E11324607021009BCBDA /* BrickLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B20E11224607021009BCBDA /* BrickLayout.swift */; };
 		5B20E1152460717D009BCBDA /* BrickType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B20E1142460717D009BCBDA /* BrickType.swift */; };
 		5B5E357B2412B78D00608728 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E357A2412B78D00608728 /* AppDelegate.swift */; };
@@ -20,6 +19,7 @@
 		5B5E35872412B79700608728 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B5E35852412B79700608728 /* LaunchScreen.storyboard */; };
 		5B5E35922412B79800608728 /* _DBBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E35912412B79800608728 /* _DBBTests.swift */; };
 		5B5E359D2412B79800608728 /* _DBBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E359C2412B79800608728 /* _DBBUITests.swift */; };
+		5BE971222475FD4E009D1DC3 /* GameUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE971212475FD4E009D1DC3 /* GameUIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,7 +42,6 @@
 /* Begin PBXFileReference section */
 		5B20E105245F29D3009BCBDA /* BrickLayouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickLayouts.swift; sourceTree = "<group>"; };
 		5B20E107245F724E009BCBDA /* BouncerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncerType.swift; sourceTree = "<group>"; };
-		5B20E10F24605F2E009BCBDA /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		5B20E11224607021009BCBDA /* BrickLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickLayout.swift; sourceTree = "<group>"; };
 		5B20E1142460717D009BCBDA /* BrickType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickType.swift; sourceTree = "<group>"; };
 		5B5E35772412B78D00608728 /* 3DBB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3DBB.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +58,7 @@
 		5B5E35982412B79800608728 /* 3DBBUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 3DBBUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B5E359C2412B79800608728 /* _DBBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DBBUITests.swift; sourceTree = "<group>"; };
 		5B5E359E2412B79800608728 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5BE971212475FD4E009D1DC3 /* GameUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUIView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,12 +123,12 @@
 				5B5E357A2412B78D00608728 /* AppDelegate.swift */,
 				5B5E357C2412B78D00608728 /* art.scnassets */,
 				5B5E357E2412B78D00608728 /* GameViewController.swift */,
+				5BE971212475FD4E009D1DC3 /* GameUIView.swift */,
 				5B20E107245F724E009BCBDA /* BouncerType.swift */,
 				5B5E35802412B78D00608728 /* Main.storyboard */,
 				5B5E35832412B79700608728 /* Assets.xcassets */,
 				5B5E35852412B79700608728 /* LaunchScreen.storyboard */,
 				5B5E35882412B79700608728 /* Info.plist */,
-				5B20E10F24605F2E009BCBDA /* SwiftUIView.swift */,
 			);
 			path = 3DBB;
 			sourceTree = "<group>";
@@ -288,7 +288,7 @@
 				5B5E357F2412B78D00608728 /* GameViewController.swift in Sources */,
 				5B20E11324607021009BCBDA /* BrickLayout.swift in Sources */,
 				5B5E357B2412B78D00608728 /* AppDelegate.swift in Sources */,
-				5B20E11024605F2E009BCBDA /* SwiftUIView.swift in Sources */,
+				5BE971222475FD4E009D1DC3 /* GameUIView.swift in Sources */,
 				5B20E1152460717D009BCBDA /* BrickType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

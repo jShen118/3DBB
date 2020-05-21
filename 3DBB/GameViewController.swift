@@ -50,8 +50,13 @@ class GameViewController: UIViewController, SCNPhysicsContactDelegate {
         ball?.physicsBody?.categoryBitMask = ballCategoryBitMask
         scene.physicsWorld.contactDelegate = self
         
-        // retrieve the SCNView
         let sceneView = self.view as! SCNView
+        let gameUI = GameUIView()
+        let uiController = UIHostingController(rootView: gameUI)
+        addChild(uiController)
+        uiController.view.frame = sceneView.frame
+        uiController.view.backgroundColor = UIColor.clear
+        sceneView.addSubview(uiController.view)
         
         // set the scene to the view
         sceneView.scene = scene
