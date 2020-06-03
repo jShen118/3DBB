@@ -9,13 +9,19 @@
 import SwiftUI
 
 struct GameUIView: View {
+    @ObservedObject var gameScene: GameScene
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            Text("\(gameScene.score)")
+
+        }
     }
 }
-
+/*
 struct GameUIView_Previews: PreviewProvider {
     static var previews: some View {
-        GameUIView()
+        GameUIView(score: 0)
     }
-}
+}*/

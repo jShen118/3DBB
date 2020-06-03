@@ -11,6 +11,7 @@
 		5B20E108245F724E009BCBDA /* BouncerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B20E107245F724E009BCBDA /* BouncerType.swift */; };
 		5B20E11324607021009BCBDA /* BrickLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B20E11224607021009BCBDA /* BrickLayout.swift */; };
 		5B20E1152460717D009BCBDA /* BrickType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B20E1142460717D009BCBDA /* BrickType.swift */; };
+		5B5AB4D6247EBF7C0001D268 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5AB4D5247EBF7B0001D268 /* GameScene.swift */; };
 		5B5E357B2412B78D00608728 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E357A2412B78D00608728 /* AppDelegate.swift */; };
 		5B5E357D2412B78D00608728 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B5E357C2412B78D00608728 /* art.scnassets */; };
 		5B5E357F2412B78D00608728 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E357E2412B78D00608728 /* GameViewController.swift */; };
@@ -44,6 +45,7 @@
 		5B20E107245F724E009BCBDA /* BouncerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncerType.swift; sourceTree = "<group>"; };
 		5B20E11224607021009BCBDA /* BrickLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickLayout.swift; sourceTree = "<group>"; };
 		5B20E1142460717D009BCBDA /* BrickType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrickType.swift; sourceTree = "<group>"; };
+		5B5AB4D5247EBF7B0001D268 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		5B5E35772412B78D00608728 /* 3DBB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 3DBB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B5E357A2412B78D00608728 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5B5E357C2412B78D00608728 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				5B5E357C2412B78D00608728 /* art.scnassets */,
 				5B5E357E2412B78D00608728 /* GameViewController.swift */,
 				5BE971212475FD4E009D1DC3 /* GameUIView.swift */,
+				5B5AB4D5247EBF7B0001D268 /* GameScene.swift */,
 				5B20E107245F724E009BCBDA /* BouncerType.swift */,
 				5B5E35802412B78D00608728 /* Main.storyboard */,
 				5B5E35832412B79700608728 /* Assets.xcassets */,
@@ -283,6 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B5AB4D6247EBF7C0001D268 /* GameScene.swift in Sources */,
 				5B20E108245F724E009BCBDA /* BouncerType.swift in Sources */,
 				5B20E106245F29D3009BCBDA /* BrickLayouts.swift in Sources */,
 				5B5E357F2412B78D00608728 /* GameViewController.swift in Sources */,
