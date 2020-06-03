@@ -12,6 +12,11 @@ import SceneKit
 
 class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     @Published var score: Int = 0
+    @Published var gameIsPaused: Bool = false {
+        didSet {
+            isPaused = gameIsPaused
+        }
+    }
     let ballCategoryBitMask = 1
     
 
