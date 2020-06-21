@@ -22,10 +22,11 @@ struct GameUIView: View {
                             // when the continue button is pressed, we unpause the game
                             self.gameScene.gameIsPaused = false
                         }
-                        /*
+                        
                         Button("Restart") {
-                            self.gameScene = GameScene()
-                        }*/
+                            self.gameScene.restart()
+                            self.gameScene.gameIsPaused = false
+                        }
                     }.font(.largeTitle)
                     .padding()
                     .background(Color.green.opacity(0.5))
