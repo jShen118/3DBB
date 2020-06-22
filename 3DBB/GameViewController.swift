@@ -4,12 +4,19 @@ import SceneKit
 import Foundation
 import SwiftUI
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, SCNSceneRendererDelegate {
     let ballCategoryBitMask = 1
     var scene = GameScene()
     
     required init(coder decoder: NSCoder) {
         super.init(coder: decoder)!
+    }
+    
+    
+    func renderer(_ aRenderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
+        //DispatchQueue.main.async {self.scene.score += 1}
+        //run per frame logic here
+        //print("\(scene.rootNode.childNode(withName: "bouncer", recursively: false)!.physicsBody?.velocity)")
     }
     
     override func viewDidLoad() {
@@ -23,6 +30,7 @@ class GameViewController: UIViewController {
         sceneView.addSubview(uiController.view)
         
         sceneView.scene = scene
+        sceneView.delegate = self
         
         // allows the user to manipulate the camera
         sceneView.allowsCameraControl = true
@@ -63,17 +71,9 @@ class GameViewController: UIViewController {
         let sceneView = SCNView()
         //let touchPoint = pan.location(in: sceneView)
         let xPan = pan.velocity(in: sceneView).x
-        //if isInBounds(Int((scene.rootNode.childNode(withName: "bouncer", recursively: false)?.position.z)!)) {
-        scene.rootNode.childNode(withName: "bouncer", recursively: false)!.runAction(SCNAction.moveBy(x: xPan/1000, y: 0, z: 0, duration: 0.1))
-        //}
         let zPan = pan.velocity(in: sceneView).y
-        //if isInBounds(Int((scene.rootNode.childNode(withName: "bouncer", recursively: false)?.position.z)!)) {
-        scene.rootNode.childNode(withName: "bouncer", recursively: false)!.runAction(SCNAction.moveBy(x: 0, y: 0, z: zPan/1000, duration: 0.1))
-        //}
-    }
-    
-    func isInBounds(_ coor: Int)-> Bool {
-        return coor >= -7 && coor <= 7
+        //scene.rootNode.childNode(withName: "bouncer", recursively: false)!.physicsBody?.velocity = SCNVector3(x: Float(xPan), y: 0.0, z: Float(zPan))
+        scene.rootNode.childNode(withName: "bouncer", recursively: false)!.runAction(SCNAction.moveBy(x: xPan/1000, y: 0, z: zPan/1000, duration: 0.1))
     }
     
     @objc
