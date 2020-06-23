@@ -18,7 +18,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         }
     }
     @Published var currentBrickLayout: BrickLayout = BrickLayouts.layout_blank
-    @Published var spinOn: Bool = false
+    @Published var spinOn: Bool = true
     var frictionValue: CGFloat {
         return spinOn ? 1.0 : 0.0
     }
@@ -47,14 +47,15 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         ballNode.name = "ball"
         ballNode.physicsBody = SCNPhysicsBody.dynamic()
         ballNode.physicsBody?.friction = frictionValue
-        ballNode.physicsBody?.restitution = 1.0
-        ballNode.physicsBody?.damping = 0.0
+        ballNode.physicsBody?.damping = 0
         ballNode.physicsBody?.angularDamping = 0
         ballNode.physicsBody?.categoryBitMask = ballCategoryBitMask
         ballNode.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "art.scnassets/texture.png")
         ballNode.position = SCNVector3(x: 5.5, y: 5, z: -6)
         ballNode.physicsBody?.velocity = SCNVector3(x: 0, y: 3, z: 0)
+        //ballNode.physicsBody?.applyForce(SCNVector3(x: 0, y: 3, z: 0), asImpulse: true)
         rootNode.addChildNode(ballNode)
+
         
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
@@ -85,7 +86,6 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     }
     
     func changeLevel(layout: BrickLayout){
-        self.insertBrickLayout(layout: layout)
         self.currentBrickLayout = layout
         self.restart()
     }
@@ -107,7 +107,6 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         let newBrick = SCNNode(geometry: brickGeom)
         newBrick.name = "brick"
         newBrick.physicsBody = SCNPhysicsBody.static()
-        newBrick.physicsBody?.restitution = 1
         newBrick.physicsBody?.friction = frictionValue
         newBrick.physicsBody?.contactTestBitMask = ballCategoryBitMask
         newBrick.position = SCNVector3(x: x, y: y, z: z)
@@ -127,8 +126,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         if bouncerType == .plane {bouncerNode.eulerAngles = SCNVector3(x: Float(Double.pi / -2), y: 0, z: 0)}
         bouncerNode.position = SCNVector3(x: 5.5, y: 0, z: -6.5)
         bouncerNode.physicsBody = SCNPhysicsBody.kinematic()
-        bouncerNode.physicsBody?.restitution = 1.0
-        bouncerNode.physicsBody?.friction = 0.0
+        bouncerNode.physicsBody?.friction = 1
         bouncerNode.physicsBody?.contactTestBitMask = ballCategoryBitMask
         rootNode.addChildNode(bouncerNode)
         
@@ -138,7 +136,6 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         rootNode.addChildNode(boxTopNode)
         boxTopNode.position = SCNVector3(x: 5.5, y: 18.5, z: -6.5)
         boxTopNode.physicsBody = SCNPhysicsBody.static()
-        boxTopNode.physicsBody?.restitution = 1
         boxTopNode.physicsBody?.friction = frictionValue
 
         let boxLeft = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
@@ -147,7 +144,6 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         rootNode.addChildNode(boxLeftNode)
         boxLeftNode.position = SCNVector3(x: -0.5, y: 9, z: -6.5)
         boxLeftNode.physicsBody = SCNPhysicsBody.static()
-        boxLeftNode.physicsBody?.restitution = 1
         boxLeftNode.physicsBody?.friction = frictionValue
 
         let boxRight = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
@@ -156,7 +152,6 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         rootNode.addChildNode(boxRightNode)
         boxRightNode.position = SCNVector3(x: 11.5, y: 9, z: -6.5)
         boxRightNode.physicsBody = SCNPhysicsBody.static()
-        boxRightNode.physicsBody?.restitution = 1
         boxRightNode.physicsBody?.friction = frictionValue
 
         let boxBack = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
@@ -165,7 +160,6 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         rootNode.addChildNode(boxBackNode)
         boxBackNode.position = SCNVector3(x: 5.5, y: 9, z: -12.5)
         boxBackNode.physicsBody = SCNPhysicsBody.static()
-        boxBackNode.physicsBody?.restitution = 1
         boxBackNode.physicsBody?.friction = frictionValue
 
         let boxFront = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
@@ -174,7 +168,6 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         rootNode.addChildNode(boxFrontNode)
         boxFrontNode.position = SCNVector3(x: 5.5, y: 9, z: -0.5)
         boxFrontNode.physicsBody = SCNPhysicsBody.static()
-        boxFrontNode.physicsBody?.restitution = 1
         boxFrontNode.opacity = 0
         boxFrontNode.physicsBody?.friction = frictionValue
     }
@@ -194,7 +187,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
             //print(contact.nodeB.physicsBody?.velocity)
             let xTorque = contact.nodeB.physicsBody?.velocity.z ?? 0
             let zTorque = contact.nodeB.physicsBody?.velocity.x ?? 0
-            contact.nodeA.physicsBody?.applyTorque(SCNVector4(x: xTorque, y: 0.0, z: zTorque, w: 0.1), asImpulse: true)
+            contact.nodeA.physicsBody?.applyTorque(SCNVector4(x: xTorque, y: 0.0, z: zTorque, w: 0.01), asImpulse: true)
         }
     }
 }

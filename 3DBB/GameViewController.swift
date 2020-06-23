@@ -15,8 +15,14 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
     
     func renderer(_ aRenderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         //DispatchQueue.main.async {self.scene.score += 1}
-        //run per frame logic here
-        //print("\(scene.rootNode.childNode(withName: "bouncer", recursively: false)!.physicsBody?.velocity)")
+        //run per frame logic here: normalize velocity vector of ballNode's physicsBody to 2.5
+        let ballNode = scene.rootNode.childNode(withName: "ball", recursively: false)!
+        let length = hypot(hypot(ballNode.physicsBody!.velocity.x, ballNode.physicsBody!.velocity.y), ballNode.physicsBody!.velocity.z)
+        //print(length)
+        let multiplier = 2.5 / length;
+        ballNode.physicsBody!.velocity.x *= multiplier
+        ballNode.physicsBody!.velocity.y *= multiplier
+        ballNode.physicsBody!.velocity.z *= multiplier
     }
     
     override func viewDidLoad() {
