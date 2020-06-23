@@ -13,8 +13,6 @@ struct GameUIView: View {
     
     var body: some View {
         ZStack {
-            // The if statement determines what is shown in the view: either the pause menu
-            // or a "Pause" symbol and the maximum tower height.
             if gameScene.gameIsPaused {
                 Color.red.opacity(0.5)
                 VStack {
@@ -22,6 +20,11 @@ struct GameUIView: View {
                         Text("Paused")
                         Button("Continue") {
                             // when the continue button is pressed, we unpause the game
+                            self.gameScene.gameIsPaused = false
+                        }
+                        
+                        Button("Restart") {
+                            self.gameScene.restart()
                             self.gameScene.gameIsPaused = false
                         }
                     }.font(.largeTitle)

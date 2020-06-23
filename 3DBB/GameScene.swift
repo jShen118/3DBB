@@ -19,18 +19,44 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     }
     let ballCategoryBitMask = 1
     
-
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
     }
     
+    func restart() {
+        rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode()
+        }
+        score = 0
+        setUpScene()
+    }
+    
     override convenience init() {
-        self.init(named: "art.scnassets/ball.scn")!
+        self.init(named: "art.scnassets/empty.scn")!
+        setUpScene()
+    }
+    
+    func setUpScene() {
+        let ballNode = SCNNode(geometry: SCNSphere(radius: 0.5))
+        ballNode.name = "ball"
+        ballNode.physicsBody = SCNPhysicsBody.dynamic()
+        ballNode.physicsBody?.friction = 0
+        ballNode.physicsBody?.rollingFriction = 0
+        //ballNode.physicsBody?.angularVelocityFactor = SCNVector3(x: 1, y: 1, z: 1)
+        ballNode.physicsBody?.restitution = CGFloat(1.0)
+        ballNode.physicsBody?.damping = CGFloat(0.0)
+        ballNode.physicsBody?.angularDamping = 0
+        ballNode.physicsBody?.categoryBitMask = ballCategoryBitMask
+        ballNode.geometry?.firstMaterial?.diffuse.contents = UIColor.gray
+        ballNode.position = SCNVector3(x: 5.5, y: 5, z: -6)
+        ballNode.physicsBody?.velocity = SCNVector3(x: 0, y: 0, z: 0)
+        rootNode.addChildNode(ballNode)
+        
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
-        rootNode.addChildNode(cameraNode)
         cameraNode.position = SCNVector3(x: 5.5, y: 8, z: 17.5)
+        rootNode.addChildNode(cameraNode)
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = .omni
@@ -41,14 +67,13 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         ambientLightNode.light!.type = .ambient
         ambientLightNode.light!.color = UIColor(white: 0.67, alpha: 1.0)
         rootNode.addChildNode(ambientLightNode)
-        physicsWorld.gravity = SCNVector3(x: 0, y: 0, z: 0)
+        physicsWorld.gravity = SCNVector3(x: 0, y: -5, z: 0)
         physicsWorld.contactDelegate = self
         
         
         boxSetUp(bouncerType: .plane)
         brickSetUp()
-        self.rootNode.childNode(withName: "ball", recursively: false)?.physicsBody?.categoryBitMask = ballCategoryBitMask
-        
+        //self.rootNode.childNode(withName: "ball", recursively: false)?.physicsBody?.categoryBitMask = ballCategoryBitMask
     }
     
     //Coordinate system convention: a brick flush at the bottom left front corner of the room as (1,1,-1), opposite corner is (11, 18, -12)
@@ -79,6 +104,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         newBrick.name = "brick"
         newBrick.physicsBody = SCNPhysicsBody.static()
         newBrick.physicsBody?.restitution = 1
+        newBrick.physicsBody?.friction = 1
         newBrick.physicsBody?.contactTestBitMask = ballCategoryBitMask
         newBrick.position = SCNVector3(x: x, y: y, z: z)
         return newBrick
@@ -98,8 +124,8 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         if bouncerType == .plane {bouncerNode.eulerAngles = SCNVector3(x: Float(Double.pi / -2), y: 0, z: 0)}
         bouncerNode.position = SCNVector3(x: 5.5, y: 0, z: -6.5)
         bouncerNode.physicsBody = SCNPhysicsBody.kinematic()
-        bouncerNode.physicsBody?.restitution = 1
-        bouncerNode.physicsBody?.friction = 0
+        bouncerNode.physicsBody?.restitution = CGFloat(1.0)
+        bouncerNode.physicsBody?.friction = 1
         
         let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0)
         boxTop.firstMaterial?.diffuse.contents = UIColor.blue
@@ -108,7 +134,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxTopNode.position = SCNVector3(x: 5.5, y: 18.5, z: -6.5)
         boxTopNode.physicsBody = SCNPhysicsBody.static()
         boxTopNode.physicsBody?.restitution = 1
-        boxTopNode.physicsBody?.friction = 0
+        boxTopNode.physicsBody?.friction = 1
 
         let boxLeft = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
         boxLeft.firstMaterial?.diffuse.contents = UIColor.blue
@@ -117,7 +143,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxLeftNode.position = SCNVector3(x: -0.5, y: 9, z: -6.5)
         boxLeftNode.physicsBody = SCNPhysicsBody.static()
         boxLeftNode.physicsBody?.restitution = 1
-        boxLeftNode.physicsBody?.friction = 0
+        boxLeftNode.physicsBody?.friction = 1
 
         let boxRight = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
         boxRight.firstMaterial?.diffuse.contents = UIColor.blue
@@ -126,7 +152,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxRightNode.position = SCNVector3(x: 11.5, y: 9, z: -6.5)
         boxRightNode.physicsBody = SCNPhysicsBody.static()
         boxRightNode.physicsBody?.restitution = 1
-        boxRightNode.physicsBody?.friction = 0
+        boxRightNode.physicsBody?.friction = 1
 
         let boxBack = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
         boxBack.firstMaterial?.diffuse.contents = UIColor.blue
@@ -135,7 +161,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxBackNode.position = SCNVector3(x: 5.5, y: 9, z: -12.5)
         boxBackNode.physicsBody = SCNPhysicsBody.static()
         boxBackNode.physicsBody?.restitution = 1
-        boxBackNode.physicsBody?.friction = 0
+        boxBackNode.physicsBody?.friction = 1
 
         let boxFront = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
         boxFront.firstMaterial?.diffuse.contents = UIColor.blue
@@ -145,7 +171,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxFrontNode.physicsBody = SCNPhysicsBody.static()
         boxFrontNode.physicsBody?.restitution = 1
         boxFrontNode.opacity = 0
-        boxFrontNode.physicsBody?.friction = 0
+        boxFrontNode.physicsBody?.friction = 1
     }
     
     //nodeA should always be ball, nodeB should always be brick

@@ -6,7 +6,7 @@ import SwiftUI
 
 class GameViewController: UIViewController {
     let ballCategoryBitMask = 1
-    let scene = GameScene()
+    var scene = GameScene()
     
     required init(coder decoder: NSCoder) {
         super.init(coder: decoder)!
