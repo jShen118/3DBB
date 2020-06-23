@@ -23,35 +23,34 @@ struct GameUIView: View {
                         Text("Levels:")
                         HStack(){
                             Button("1"){
-                                //TODO: load levels correctly lol
-                                self.gameScene.insertBrickLayout(layout: BrickLayouts.layout_1)
+                                self.gameScene.changeLevel(layout: BrickLayouts.layout_1)
                                 self.inMenu = false
                             }
                             Spacer()
                                 .frame(width: 20)
                             Button("2"){
-                                self.gameScene.insertBrickLayout(layout: BrickLayouts.layout_2)
+                                self.gameScene.changeLevel(layout: BrickLayouts.layout_2)
                                 self.inMenu = false
                             }
                             Spacer()
                                 .frame(width: 20)
                             Button("3"){
-                                self.gameScene.insertBrickLayout(layout: BrickLayouts.layout_2)
+                                self.gameScene.changeLevel(layout: BrickLayouts.layout_2)
                                 self.inMenu = false
                             }
                             Spacer()
                                 .frame(width: 20)
                             Button("4"){
-                                self.gameScene.insertBrickLayout(layout: BrickLayouts.layout_2)
+                                self.gameScene.changeLevel(layout: BrickLayouts.layout_2)
                                 self.inMenu = false
                             }
                             Spacer()
                                 .frame(width: 20)
                             Button("5"){
-                                self.gameScene.insertBrickLayout(layout: BrickLayouts.layout_2)
+                                self.gameScene.changeLevel(layout: BrickLayouts.layout_2)
                                 self.inMenu = false
                             }
-
+                            
                         }
                     }
                 }
@@ -76,7 +75,7 @@ struct GameUIView: View {
                                     self.gameScene.restart()
                                 }
                                 Button("Quit") {
-                                    self.gameScene.restart()
+                                    self.gameScene.changeLevel(layout: BrickLayouts.layout_blank)
                                     self.gameScene.gameIsPaused = false
                                     self.inMenu = true
                                 }

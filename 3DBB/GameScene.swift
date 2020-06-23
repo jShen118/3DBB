@@ -17,8 +17,8 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
             isPaused = gameIsPaused
         }
     }
+    @Published var currentBrickLayout: BrickLayout = BrickLayouts.layout_blank
     let ballCategoryBitMask = 1
-    @State var currentBrickLayout: BrickLayout = BrickLayouts.layout_blank
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
@@ -85,12 +85,15 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         insertBrickLayout(layout: self.currentBrickLayout)
     }
     
-    
+    func changeLevel(layout: BrickLayout){
+        self.insertBrickLayout(layout: layout)
+        self.currentBrickLayout = layout
+        self.restart()
+    }
     
     func insertBrickLayout(layout: BrickLayout) {
         for b in layout.breakableBricks {insertBrick(x: b.x, y: b.y, z: b.z, type: .breakable)}
         for b in layout.unbreakableBricks {insertBrick(x: b.x, y: b.y, z: b.z, type: .unbreakable)}
-        
     }
     
     func insertBrick(x: Float, y: Float, z: Float, type: BrickType) {
