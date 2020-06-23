@@ -18,7 +18,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         }
     }
     let ballCategoryBitMask = 1
-    
+    @State var currentBrickLayout: BrickLayout = BrickLayouts.layout_blank
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
@@ -81,7 +81,8 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     func brickSetUp() {
         //insertBrick(x: 1, y: 1, z: -1)
         //insertBrick(x: 11, y: 18, z: -12)
-        insertBrickLayout(layout: BrickLayouts.layout_2)
+        
+        insertBrickLayout(layout: self.currentBrickLayout)
     }
     
     
@@ -89,6 +90,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     func insertBrickLayout(layout: BrickLayout) {
         for b in layout.breakableBricks {insertBrick(x: b.x, y: b.y, z: b.z, type: .breakable)}
         for b in layout.unbreakableBricks {insertBrick(x: b.x, y: b.y, z: b.z, type: .unbreakable)}
+        
     }
     
     func insertBrick(x: Float, y: Float, z: Float, type: BrickType) {
