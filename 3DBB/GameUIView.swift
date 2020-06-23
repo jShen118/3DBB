@@ -79,6 +79,9 @@ struct GameUIView: View {
                                     self.gameScene.gameIsPaused = false
                                     self.inMenu = true
                                 }
+                                Toggle(isOn: $gameScene.spinOn) {
+                                    Text("Spin")
+                                }
                             }.font(.largeTitle)
                                 .padding()
                                 .background(Color.green.opacity(0.5))

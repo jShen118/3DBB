@@ -72,8 +72,8 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         //let touchPoint = pan.location(in: sceneView)
         let xPan = pan.velocity(in: sceneView).x
         let zPan = pan.velocity(in: sceneView).y
-        //scene.rootNode.childNode(withName: "bouncer", recursively: false)!.physicsBody?.velocity = SCNVector3(x: Float(xPan), y: 0.0, z: Float(zPan))
         scene.rootNode.childNode(withName: "bouncer", recursively: false)!.runAction(SCNAction.moveBy(x: xPan/1000, y: 0, z: zPan/1000, duration: 0.1))
+        scene.rootNode.childNode(withName: "bouncer", recursively: false)!.physicsBody?.velocity = SCNVector3(x: Float(xPan), y: 0.0, z: Float(zPan))
     }
     
     @objc

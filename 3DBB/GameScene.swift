@@ -18,6 +18,10 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         }
     }
     @Published var currentBrickLayout: BrickLayout = BrickLayouts.layout_blank
+    @Published var spinOn: Bool = false
+    var frictionValue: CGFloat {
+        return spinOn ? 1.0 : 0.0
+    }
     let ballCategoryBitMask = 1
     
     required init(coder aDecoder: NSCoder) {
@@ -42,11 +46,9 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         let ballNode = SCNNode(geometry: SCNSphere(radius: 0.4))
         ballNode.name = "ball"
         ballNode.physicsBody = SCNPhysicsBody.dynamic()
-        ballNode.physicsBody?.friction = 0
-        ballNode.physicsBody?.rollingFriction = 0
-        //ballNode.physicsBody?.angularVelocityFactor = SCNVector3(x: 1, y: 1, z: 1)
-        ballNode.physicsBody?.restitution = CGFloat(1.0)
-        ballNode.physicsBody?.damping = CGFloat(0.0)
+        ballNode.physicsBody?.friction = frictionValue
+        ballNode.physicsBody?.restitution = 1.0
+        ballNode.physicsBody?.damping = 0.0
         ballNode.physicsBody?.angularDamping = 0
         ballNode.physicsBody?.categoryBitMask = ballCategoryBitMask
         ballNode.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "art.scnassets/texture.png")
@@ -79,9 +81,6 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     //Coordinate system convention: a brick flush at the bottom left front corner of the room as (1,1,-1), opposite corner is (11, 18, -12)
     //the room is 11x18x12, bricks are 1x1x1
     func brickSetUp() {
-        //insertBrick(x: 1, y: 1, z: -1)
-        //insertBrick(x: 11, y: 18, z: -12)
-        
         insertBrickLayout(layout: self.currentBrickLayout)
     }
     
@@ -109,7 +108,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         newBrick.name = "brick"
         newBrick.physicsBody = SCNPhysicsBody.static()
         newBrick.physicsBody?.restitution = 1
-        newBrick.physicsBody?.friction = 1
+        newBrick.physicsBody?.friction = frictionValue
         newBrick.physicsBody?.contactTestBitMask = ballCategoryBitMask
         newBrick.position = SCNVector3(x: x, y: y, z: z)
         return newBrick
@@ -128,8 +127,8 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         if bouncerType == .plane {bouncerNode.eulerAngles = SCNVector3(x: Float(Double.pi / -2), y: 0, z: 0)}
         bouncerNode.position = SCNVector3(x: 5.5, y: 0, z: -6.5)
         bouncerNode.physicsBody = SCNPhysicsBody.kinematic()
-        bouncerNode.physicsBody?.restitution = CGFloat(1.0)
-        bouncerNode.physicsBody?.friction = 1
+        bouncerNode.physicsBody?.restitution = 1.0
+        bouncerNode.physicsBody?.friction = 0.0
         bouncerNode.physicsBody?.contactTestBitMask = ballCategoryBitMask
         rootNode.addChildNode(bouncerNode)
         
@@ -140,7 +139,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxTopNode.position = SCNVector3(x: 5.5, y: 18.5, z: -6.5)
         boxTopNode.physicsBody = SCNPhysicsBody.static()
         boxTopNode.physicsBody?.restitution = 1
-        boxTopNode.physicsBody?.friction = 1
+        boxTopNode.physicsBody?.friction = frictionValue
 
         let boxLeft = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
         boxLeft.firstMaterial?.diffuse.contents = UIColor.blue
@@ -149,7 +148,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxLeftNode.position = SCNVector3(x: -0.5, y: 9, z: -6.5)
         boxLeftNode.physicsBody = SCNPhysicsBody.static()
         boxLeftNode.physicsBody?.restitution = 1
-        boxLeftNode.physicsBody?.friction = 1
+        boxLeftNode.physicsBody?.friction = frictionValue
 
         let boxRight = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
         boxRight.firstMaterial?.diffuse.contents = UIColor.blue
@@ -158,7 +157,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxRightNode.position = SCNVector3(x: 11.5, y: 9, z: -6.5)
         boxRightNode.physicsBody = SCNPhysicsBody.static()
         boxRightNode.physicsBody?.restitution = 1
-        boxRightNode.physicsBody?.friction = 1
+        boxRightNode.physicsBody?.friction = frictionValue
 
         let boxBack = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
         boxBack.firstMaterial?.diffuse.contents = UIColor.blue
@@ -167,7 +166,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxBackNode.position = SCNVector3(x: 5.5, y: 9, z: -12.5)
         boxBackNode.physicsBody = SCNPhysicsBody.static()
         boxBackNode.physicsBody?.restitution = 1
-        boxBackNode.physicsBody?.friction = 1
+        boxBackNode.physicsBody?.friction = frictionValue
 
         let boxFront = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
         boxFront.firstMaterial?.diffuse.contents = UIColor.blue
@@ -177,27 +176,25 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxFrontNode.physicsBody = SCNPhysicsBody.static()
         boxFrontNode.physicsBody?.restitution = 1
         boxFrontNode.opacity = 0
-        boxFrontNode.physicsBody?.friction = 1
+        boxFrontNode.physicsBody?.friction = frictionValue
     }
     
     //nodeA should always be ball, nodeB should always be brick or bouncer
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-        print("\(contact.nodeA.name), \(contact.nodeB.name)")
+        //print("\(contact.nodeA.name), \(contact.nodeB.name)")
         if contact.nodeB.name == "brick" {
             let brickColor = contact.nodeB.geometry?.firstMaterial?.diffuse.contents as! UIColor
             switch brickColor {
-                case UIColor.gray: grayBrickHit()
+                case UIColor.gray: break
                 case UIColor.purple: contact.nodeB.geometry?.firstMaterial?.diffuse.contents = UIColor(red: 0.7, green: 0.0, blue: 0.3, alpha: 1.0)
                 case UIColor(red: 0.7, green: 0.0, blue: 0.3, alpha: 1.0): contact.nodeB.geometry?.firstMaterial?.diffuse.contents = UIColor(red: 0.9, green: 0.0, blue: 0.0, alpha: 1.0)
                 default: contact.nodeB.removeFromParentNode(); DispatchQueue.main.async {self.score += 1}
             }
-        } else {
-            print(contact.nodeB.physicsBody?.velocity)
-            let xTorque = (contact.nodeB.physicsBody?.velocity.z ?? 0) * 1
-            let zTorque = (contact.nodeB.physicsBody?.velocity.x ?? 0) * 1
-            contact.nodeA.physicsBody?.applyTorque(SCNVector4(x: xTorque, y: 0.0, z: zTorque, w: 1), asImpulse: true)
+        } else if spinOn {
+            //print(contact.nodeB.physicsBody?.velocity)
+            let xTorque = contact.nodeB.physicsBody?.velocity.z ?? 0
+            let zTorque = contact.nodeB.physicsBody?.velocity.x ?? 0
+            contact.nodeA.physicsBody?.applyTorque(SCNVector4(x: xTorque, y: 0.0, z: zTorque, w: 0.1), asImpulse: true)
         }
     }
-    
-    func grayBrickHit() {}
 }
