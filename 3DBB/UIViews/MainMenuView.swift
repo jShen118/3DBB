@@ -13,51 +13,36 @@ struct MainMenuView: View {
     @Binding var inMenu: Bool
     
     var body: some View {
-        ScrollView {
-            VStack {
-                Text("3D Brick Breaker")
-                    .font(.system(size: 40))
-                Spacer().frame(height: 20)
-                HStack{
-                    Button("1"){
-                        self.gameScene.changeLevel(layout: BrickLayouts.layout_1)
-                        self.inMenu = false
-                    }.frame(width: 100, height: 100)
-                    .buttonStyle(GradientBackgroundStyle())
-                    Spacer().frame(width: 20)
-                    Button("2"){
-                        self.gameScene.changeLevel(layout: BrickLayouts.layout_2)
-                        self.inMenu = false
-                    }.frame(width: 100, height: 100)
-                    .buttonStyle(GradientBackgroundStyle())
-                }
-                Spacer().frame(width: 20)
-                HStack{
-                    Button("3"){
-                        self.gameScene.changeLevel(layout: BrickLayouts.layout_3)
-                        self.inMenu = false
+        VStack(spacing: 0){
+            Text("3D Brick Breaker")
+                .font(.system(size: 40))
+            Spacer()
+                .frame(height: 20)
+            HStack{
+                Text("Levels:")
+                    .foregroundColor(Color.black)
+                    .font(.system(size: 15))
+                Spacer()
+                Text("High Score:")
+                    .foregroundColor(Color.black)
+                    .font(.system(size: 15))
+            }
+            .frame(width: 250, height: 30)
+            ScrollView {
+                VStack {
+                    ForEach(0..<Levels.array.count, id: \.self) { index in
+                        Button(action: {
+                            self.gameScene.changeLevel(layout: Levels.array[index].layout)
+                            self.inMenu = false
+                        }){
+                            LevelPreviewUI(level: Levels.array[index])
+                        }
                     }
-                    Spacer().frame(width: 20)
-                    Button("4"){
-                        self.gameScene.changeLevel(layout: BrickLayouts.layout_4)
-                        self.inMenu = false
-                    }
-                }
-                Spacer().frame(width: 20)
-                HStack{
-                    Button("5"){
-                        self.gameScene.changeLevel(layout: BrickLayouts.layout_5)
-                        self.inMenu = false
-                    }
-                    Spacer().frame(width: 20)
-                    Button("6"){
-                        self.gameScene.changeLevel(layout: BrickLayouts.layout_6)
-                        self.inMenu = false
-                    }
-                }
-                Spacer().frame(width: 20)
+                }.frame(width: 500)
             }
         }
+
+        
     }
 }
 

@@ -24,6 +24,8 @@
 		5BCF805624A3E245009E83D0 /* PauseMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF805524A3E245009E83D0 /* PauseMenuView.swift */; };
 		5BCF805824A3E525009E83D0 /* GradientBackgroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF805724A3E524009E83D0 /* GradientBackgroundStyle.swift */; };
 		5BE971222475FD4E009D1DC3 /* GameUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE971212475FD4E009D1DC3 /* GameUIView.swift */; };
+		FA2C3CAA24A3EC86004BC7D7 /* LevelPreviewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2C3CA924A3EC86004BC7D7 /* LevelPreviewUI.swift */; };
+		FA2C3CAC24A3ECE0004BC7D7 /* LevelInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2C3CAB24A3ECE0004BC7D7 /* LevelInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		5BCF805524A3E245009E83D0 /* PauseMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseMenuView.swift; sourceTree = "<group>"; };
 		5BCF805724A3E524009E83D0 /* GradientBackgroundStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackgroundStyle.swift; sourceTree = "<group>"; };
 		5BE971212475FD4E009D1DC3 /* GameUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUIView.swift; sourceTree = "<group>"; };
+		FA2C3CA924A3EC86004BC7D7 /* LevelPreviewUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelPreviewUI.swift; sourceTree = "<group>"; };
+		FA2C3CAB24A3ECE0004BC7D7 /* LevelInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +137,7 @@
 				5B5E357E2412B78D00608728 /* GameViewController.swift */,
 				5BCF805424A3E21C009E83D0 /* UIViews */,
 				5B5AB4D5247EBF7B0001D268 /* GameScene.swift */,
+				FA2C3CAB24A3ECE0004BC7D7 /* LevelInfo.swift */,
 				5B20E107245F724E009BCBDA /* BouncerType.swift */,
 				5B5E35802412B78D00608728 /* Main.storyboard */,
 				5B5E35832412B79700608728 /* Assets.xcassets */,
@@ -167,6 +172,7 @@
 				5BCF805224A3D5E0009E83D0 /* MainMenuView.swift */,
 				5BCF805524A3E245009E83D0 /* PauseMenuView.swift */,
 				5BCF805724A3E524009E83D0 /* GradientBackgroundStyle.swift */,
+				FA2C3CA924A3EC86004BC7D7 /* LevelPreviewUI.swift */,
 			);
 			path = UIViews;
 			sourceTree = "<group>";
@@ -310,6 +316,8 @@
 				5B5E357F2412B78D00608728 /* GameViewController.swift in Sources */,
 				5BCF805624A3E245009E83D0 /* PauseMenuView.swift in Sources */,
 				5BCF805324A3D5E0009E83D0 /* MainMenuView.swift in Sources */,
+				FA2C3CAA24A3EC86004BC7D7 /* LevelPreviewUI.swift in Sources */,
+				FA2C3CAC24A3ECE0004BC7D7 /* LevelInfo.swift in Sources */,
 				5B20E11324607021009BCBDA /* BrickLayout.swift in Sources */,
 				5B5E357B2412B78D00608728 /* AppDelegate.swift in Sources */,
 				5BE971222475FD4E009D1DC3 /* GameUIView.swift in Sources */,
