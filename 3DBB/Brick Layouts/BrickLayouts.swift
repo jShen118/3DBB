@@ -14,6 +14,10 @@ struct BrickLayouts {
     static let layout_blank: BrickLayout = BrickLayout(breakable: [], unbreakable: [])
     static let layout_1: BrickLayout = BrickLayout(breakable: fill(x1: 4, x2: 8, y1: 12, y2: 15, z1: -4, z2: -7), unbreakable: fill(x1: 3, x2: 3, y1: 12, y2: 15, z1: -4, z2: -7) + fill(x1: 9, x2: 9, y1: 12, y2: 15, z1: -4, z2: -7))
     static let layout_2 = BrickLayout(breakable: fill(x1: 1, x2: 11, y1: 12, y2: 18, z1: -1, z2: -12), unbreakable: [])
+    static let layout_3: BrickLayout = BrickLayout(breakable: [], unbreakable: [])
+    static let layout_4: BrickLayout = BrickLayout(breakable: [], unbreakable: [])
+    static let layout_5: BrickLayout = BrickLayout(breakable: [], unbreakable: [])
+    static let layout_6: BrickLayout = BrickLayout(breakable: [], unbreakable: [])
 }
 
 //fills a defined space full of bricks. x2 should be bigger than or equal to x1, y2 should be bigger than or equal to y1, and IMPORTANT: z1 should be bigger than or equal to z2

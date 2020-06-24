@@ -54,6 +54,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         ballNode.name = "ball"
         ballNode.physicsBody = SCNPhysicsBody.dynamic()
         ballNode.physicsBody?.friction = frictionValue
+        ballNode.physicsBody?.restitution = 1
         ballNode.physicsBody?.damping = 0
         ballNode.physicsBody?.angularDamping = 0
         ballNode.physicsBody?.categoryBitMask = ballCategoryBitMask
@@ -151,6 +152,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxTopNode.position = SCNVector3(x: 5.5, y: 18.5, z: -6.5)
         boxTopNode.physicsBody = SCNPhysicsBody.static()
         boxTopNode.physicsBody?.friction = frictionValue
+        boxTopNode.physicsBody?.restitution = 1
         
 
         let boxLeft = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
@@ -160,6 +162,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxLeftNode.position = SCNVector3(x: -0.5, y: 9, z: -6.5)
         boxLeftNode.physicsBody = SCNPhysicsBody.static()
         boxLeftNode.physicsBody?.friction = frictionValue
+        boxLeftNode.physicsBody?.restitution = 1
 
         let boxRight = SCNBox(width: 1, height: 18, length: 13, chamferRadius: 0)
         boxRight.firstMaterial?.diffuse.contents = boxColor
@@ -168,6 +171,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxRightNode.position = SCNVector3(x: 11.5, y: 9, z: -6.5)
         boxRightNode.physicsBody = SCNPhysicsBody.static()
         boxRightNode.physicsBody?.friction = frictionValue
+        boxRightNode.physicsBody?.restitution = 1
 
         let boxBack = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
         boxBack.firstMaterial?.diffuse.contents = boxColor
@@ -176,6 +180,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxBackNode.position = SCNVector3(x: 5.5, y: 9, z: -12.5)
         boxBackNode.physicsBody = SCNPhysicsBody.static()
         boxBackNode.physicsBody?.friction = frictionValue
+        boxBackNode.physicsBody?.restitution = 1
 
         let boxFront = SCNBox(width: 11, height: 18, length: 1, chamferRadius: 0)
         let boxFrontNode = SCNNode(geometry: boxFront)
@@ -184,6 +189,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxFrontNode.physicsBody = SCNPhysicsBody.static()
         boxFrontNode.opacity = 0
         boxFrontNode.physicsBody?.friction = frictionValue
+        boxFrontNode.physicsBody?.restitution = 1
     }
     
     //nodeA should always be ball, nodeB should always be brick or bouncer
