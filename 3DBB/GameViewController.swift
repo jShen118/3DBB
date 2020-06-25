@@ -39,10 +39,10 @@ class GameViewController: UIViewController, SCNSceneRendererDelegate {
         sceneView.delegate = self
         
         // allows the user to manipulate the camera
-        sceneView.allowsCameraControl = true
+        sceneView.allowsCameraControl = false
         
         // show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
         
         // configure the view
         sceneView.backgroundColor = UIColor.black

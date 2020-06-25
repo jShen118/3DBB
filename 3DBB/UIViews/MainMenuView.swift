@@ -20,11 +20,11 @@ struct MainMenuView: View {
                     HStack{
                         ZStack{
                             Text("3D Brick Breaker")
-                                .font(.system(size: 50))
+                                .font(.system(size: 40))
                                 .foregroundColor(Color.black)
                             Text("3D Brick Breaker")
-                                .font(.system(size: 50))
-                                .offset(x: -1, y: -1)
+                                .font(.system(size: 40))
+                                .offset(x: -2, y: -2)
                                 .foregroundColor(Color.green)
                         }
                         Button(action: {self.inSettings = true}) {
@@ -32,7 +32,7 @@ struct MainMenuView: View {
                                 Circle().fill(Color.green).scaleEffect(0.87)
                                 Image(systemName: "gear").resizable().aspectRatio(contentMode: .fill)
                                     .foregroundColor(Color.black)
-                            }.frame(width: 50, height: 50)
+                            }.frame(width: 40, height: 40)
                             //.background(Color.green).clipShape(Circle())
                         }
                     }
@@ -41,11 +41,11 @@ struct MainMenuView: View {
                     HStack{
                         Text("Levels:")
                             .foregroundColor(Color.black)
-                            .font(.system(size: 15))
+                            .font(.system(size: 22))
                         Spacer()
                         Text("High Score:")
                             .foregroundColor(Color.black)
-                            .font(.system(size: 15))
+                            .font(.system(size: 22))
                     }
                     .frame(width: 250, height: 30)
                     ScrollView {
