@@ -85,15 +85,58 @@ struct InGameView: View {
                 .clipShape(RoundedRectangle(cornerRadius: CGFloat(20)))
                 .transition(.slide)
             }
+            if gameScene.gameOver && !inSettings {
+                VStack {
+                    Text("Game Over")
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            self.gameScene.gameOver = false
+                            self.gameScene.restart()
+                        }) {
+                            Image(systemName: "arrow.clockwise.circle").resizable().aspectRatio(contentMode: .fit)
+                                .foregroundColor(Color.black).frame(width: 50, height: 50).background(Color.green).clipShape(Circle())
+                        }
+                        Spacer()
+                        Button(action: {
+                            self.gameScene.changeLevel(layout: BrickLayouts.layout_blank, id: 0)
+                            self.gameScene.gameOver = false
+                            self.inMenu = true
+                        }) {
+                            ZStack {
+                                Circle().fill(Color.black).frame(width: 50, height: 50)
+                                Image(systemName: "list.dash").scaleEffect(0.92)
+                                .foregroundColor(Color.black).frame(width: 42, height: 42).background(Color.green).clipShape(Circle())
+                            }
+                        }
+                        Spacer()
+                        Button(action: {self.inSettings = true}) {
+                            ZStack {
+                                Circle().fill(Color.green).scaleEffect(0.87)
+                                Image(systemName: "gear").resizable().aspectRatio(contentMode: .fill)
+                                .foregroundColor(Color.black)
+                            }.frame(width: 50, height: 50)
+                            //.background(Color.green).clipShape(Circle())
+                        }
+                        Spacer()
+                    }
+                    Text("Final Score: \(gameScene.score)")
+                }.font(.largeTitle).frame(width: 300, height: 200)
+                .padding()
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: CGFloat(20)))
+                .transition(.slide)
+            }
             VStack {
                 HStack {
                     Spacer()
-                    Button(action: { self.gameScene.gameIsPaused.toggle() }) {
+                    Button(action: { self.gameScene.gameIsPaused = true }) {
                         Text("⏸").font(.largeTitle).padding()
                     }
                 }
                 Text("\(gameScene.score)").font(.largeTitle)
-                Spacer()
+                Spacer(minLength: 500)
+                Text("\(gameScene.numLives) Remaining Lives").foregroundColor(Color.white).font(.system(size: 25)).padding()
             }
         }
     }

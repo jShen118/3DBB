@@ -28,6 +28,9 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
             bouncerSetUp(bouncerType: bouncerType)
         }
     }
+    @Published var numLives: Int = 3
+    @Published var gameOver = false
+    
     
     var frictionValue: CGFloat {
         return spinOn ? 1.0 : 0.0
@@ -43,6 +46,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
             node.removeFromParentNode()
         }
         score = 0
+        numLives = 3
         setUpScene(bouncerType: bouncerType)
     }
     
@@ -58,20 +62,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     }
     
     func setUpScene(bouncerType: BouncerType) {
-        let ballNode = SCNNode(geometry: SCNSphere(radius: 0.5))
-        ballNode.name = "ball"
-        ballNode.physicsBody = SCNPhysicsBody.dynamic()
-        ballNode.physicsBody?.friction = frictionValue
-        ballNode.physicsBody?.restitution = 1
-        ballNode.physicsBody?.damping = 0
-        ballNode.physicsBody?.angularDamping = 0
-        ballNode.physicsBody?.categoryBitMask = ballCategoryBitMask
-        ballNode.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "art.scnassets/sudoku-blankgrid.png")
-        ballNode.position = SCNVector3(x: 5.5, y: 5, z: -6)
-        ballNode.physicsBody?.velocity = SCNVector3(x: 0, y: 3, z: 0)
-        //ballNode.physicsBody?.applyForce(SCNVector3(x: 0, y: 3, z: 0), asImpulse: true)
-        rootNode.addChildNode(ballNode)
-
+        setUpBall()
         
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
@@ -90,9 +81,23 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         physicsWorld.gravity = SCNVector3(x: 0, y: 0, z: 0)
         physicsWorld.contactDelegate = self
         
-        
         boxSetUp(bouncerType: bouncerType)
         brickSetUp()
+    }
+    
+    func setUpBall() {
+        let ballNode = SCNNode(geometry: SCNSphere(radius: 0.5))
+        ballNode.name = "ball"
+        ballNode.physicsBody = SCNPhysicsBody.dynamic()
+        ballNode.physicsBody?.friction = frictionValue
+        ballNode.physicsBody?.restitution = 1
+        ballNode.physicsBody?.damping = 0
+        ballNode.physicsBody?.angularDamping = 0
+        ballNode.physicsBody?.categoryBitMask = ballCategoryBitMask
+        ballNode.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "art.scnassets/sudoku-blankgrid.png")
+        ballNode.position = SCNVector3(x: 5.5, y: 5, z: -6)
+        ballNode.physicsBody?.velocity = SCNVector3(x: 0, y: 3, z: 0)
+        rootNode.addChildNode(ballNode)
     }
     
     //Coordinate system convention: a brick flush at the bottom left front corner of the room as (1,1,-1), opposite corner is (11, 18, -12)
@@ -203,11 +208,21 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxFrontNode.opacity = 0
         boxFrontNode.physicsBody?.friction = frictionValue
         boxFrontNode.physicsBody?.restitution = 1
+        
+        let bound = SCNBox(width: 20, height: 1, length: 20, chamferRadius: 0)
+        let boundNode = SCNNode(geometry: bound)
+        boundNode.name = "bound"
+        boundNode.position = SCNVector3(x: 5.5, y: -6, z: -6.5)
+        boundNode.physicsBody = SCNPhysicsBody.static()
+        boundNode.opacity = 0
+        boundNode.physicsBody?.contactTestBitMask = ballCategoryBitMask
+        rootNode.addChildNode(boundNode)
     }
     
-    //nodeA should always be ball, nodeB should always be brick or bouncer
+    //nodeA should always be ball, nodeB should always be brick, bouncer, or bound
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-        //print("\(contact.nodeA.name), \(contact.nodeB.name)")
+        print("\(contact.nodeA.name), \(contact.nodeB.name)")
+        
         if contact.nodeB.name == "brick" {
             let brickColor = contact.nodeB.geometry?.firstMaterial?.diffuse.contents as! UIColor
             
@@ -217,13 +232,31 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
                 case breakableBrickColor2: contact.nodeB.geometry?.firstMaterial?.diffuse.contents = breakableBrickColor3
                 default: contact.nodeB.removeFromParentNode(); DispatchQueue.main.async {self.addScore()}
             }
-        } else if spinOn {
-            //print(contact.nodeB.physicsBody?.velocity)
-            let xTorque = contact.nodeB.physicsBody?.velocity.z ?? 0
-            let zTorque = contact.nodeB.physicsBody?.velocity.x ?? 0
-            contact.nodeA.physicsBody?.applyTorque(SCNVector4(x: xTorque, y: 0.0, z: zTorque, w: 0.01), asImpulse: true)
+            return
+        }
+        if contact.nodeB.name == "bouncer" {
+            if spinOn {
+                let xTorque = contact.nodeB.physicsBody?.velocity.z ?? 0
+                let zTorque = contact.nodeB.physicsBody?.velocity.x ?? 0
+                print("\(xTorque), \(zTorque)")
+                contact.nodeA.physicsBody?.applyTorque(SCNVector4(x: xTorque, y: 0.0, z: zTorque, w: 1.0), asImpulse: true)
+            }
+            return
+        }
+        DispatchQueue.main.async {self.reduceLives()}
+    }
+    
+    func reduceLives() {
+        numLives -= 1
+        if numLives == 0 {gameOver = true; isPaused = true}
+        else {
+            rootNode.enumerateChildNodes { (node, stop) in
+                node.removeFromParentNode()
+            }
+            setUpScene(bouncerType: bouncerType)
         }
     }
+    
     func addScore(){
         self.score += 1
         if Levels.array[currentID].highScore < score{
