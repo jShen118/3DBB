@@ -129,6 +129,7 @@ struct InGameView: View {
             }
             VStack {
                 HStack {
+                    Text("❤️ x\(gameScene.numLives)").foregroundColor(Color.white).font(.system(size: 25)).padding()
                     Spacer()
                     Button(action: { self.gameScene.gameIsPaused = true }) {
                         Text("⏸").font(.largeTitle).padding()
@@ -136,7 +137,6 @@ struct InGameView: View {
                 }
                 Text("\(gameScene.score)").font(.largeTitle)
                 Spacer(minLength: 500)
-                Text("\(gameScene.numLives) Remaining Lives").foregroundColor(Color.white).font(.system(size: 25)).padding()
             }
         }
     }

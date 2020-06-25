@@ -250,10 +250,8 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         numLives -= 1
         if numLives == 0 {gameOver = true; isPaused = true}
         else {
-            rootNode.enumerateChildNodes { (node, stop) in
-                node.removeFromParentNode()
-            }
-            setUpScene(bouncerType: bouncerType)
+            rootNode.childNode(withName: "ball", recursively: false)?.position = SCNVector3(x: 5.5, y: 5, z: -6)
+            rootNode.childNode(withName: "ball", recursively: false)?.physicsBody?.velocity = SCNVector3(x: 0, y: 3, z: 0)
         }
     }
     
