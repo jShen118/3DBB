@@ -19,7 +19,6 @@ struct InGameView: View {
                 !inSettings {
                 VStack {
                     Text("Paused")
-                    
                     HStack {
                         Spacer()
                         Button(action: {
