@@ -17,7 +17,7 @@ struct GameUIView: View {
             if inMenu {
                 MainMenuView(gameScene: gameScene, inMenu: $inMenu)
             } else {
-                PauseMenuView(gameScene: gameScene, inMenu: $inMenu)
+                InGameView(gameScene: gameScene, inMenu: $inMenu)
             }
         }
     }

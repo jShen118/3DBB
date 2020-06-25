@@ -21,7 +21,7 @@
 		5B5E35922412B79800608728 /* _DBBTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E35912412B79800608728 /* _DBBTests.swift */; };
 		5B5E359D2412B79800608728 /* _DBBUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B5E359C2412B79800608728 /* _DBBUITests.swift */; };
 		5BCF805324A3D5E0009E83D0 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF805224A3D5E0009E83D0 /* MainMenuView.swift */; };
-		5BCF805624A3E245009E83D0 /* PauseMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF805524A3E245009E83D0 /* PauseMenuView.swift */; };
+		5BCF805624A3E245009E83D0 /* InGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF805524A3E245009E83D0 /* InGameView.swift */; };
 		5BCF805824A3E525009E83D0 /* GradientBackgroundStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF805724A3E524009E83D0 /* GradientBackgroundStyle.swift */; };
 		5BE971222475FD4E009D1DC3 /* GameUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE971212475FD4E009D1DC3 /* GameUIView.swift */; };
 		FA2C3CAA24A3EC86004BC7D7 /* LevelPreviewUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2C3CA924A3EC86004BC7D7 /* LevelPreviewUI.swift */; };
@@ -66,7 +66,7 @@
 		5B5E359C2412B79800608728 /* _DBBUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DBBUITests.swift; sourceTree = "<group>"; };
 		5B5E359E2412B79800608728 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5BCF805224A3D5E0009E83D0 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
-		5BCF805524A3E245009E83D0 /* PauseMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PauseMenuView.swift; sourceTree = "<group>"; };
+		5BCF805524A3E245009E83D0 /* InGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InGameView.swift; sourceTree = "<group>"; };
 		5BCF805724A3E524009E83D0 /* GradientBackgroundStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackgroundStyle.swift; sourceTree = "<group>"; };
 		5BE971212475FD4E009D1DC3 /* GameUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUIView.swift; sourceTree = "<group>"; };
 		FA2C3CA924A3EC86004BC7D7 /* LevelPreviewUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelPreviewUI.swift; sourceTree = "<group>"; };
@@ -170,7 +170,7 @@
 			children = (
 				5BE971212475FD4E009D1DC3 /* GameUIView.swift */,
 				5BCF805224A3D5E0009E83D0 /* MainMenuView.swift */,
-				5BCF805524A3E245009E83D0 /* PauseMenuView.swift */,
+				5BCF805524A3E245009E83D0 /* InGameView.swift */,
 				5BCF805724A3E524009E83D0 /* GradientBackgroundStyle.swift */,
 				FA2C3CA924A3EC86004BC7D7 /* LevelPreviewUI.swift */,
 			);
@@ -314,7 +314,7 @@
 				5B20E108245F724E009BCBDA /* BouncerType.swift in Sources */,
 				5B20E106245F29D3009BCBDA /* BrickLayouts.swift in Sources */,
 				5B5E357F2412B78D00608728 /* GameViewController.swift in Sources */,
-				5BCF805624A3E245009E83D0 /* PauseMenuView.swift in Sources */,
+				5BCF805624A3E245009E83D0 /* InGameView.swift in Sources */,
 				5BCF805324A3D5E0009E83D0 /* MainMenuView.swift in Sources */,
 				FA2C3CAA24A3EC86004BC7D7 /* LevelPreviewUI.swift in Sources */,
 				FA2C3CAC24A3ECE0004BC7D7 /* LevelInfo.swift in Sources */,
