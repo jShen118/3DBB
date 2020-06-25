@@ -16,11 +16,17 @@ struct LevelPreviewUI: View{
         ZStack{
             Rectangle()
                 .frame(width: 300, height: 80, alignment: .leading)
-                .foregroundColor(Color.white.opacity(0.5))
+                .foregroundColor(Color.white.opacity(0.8))
             HStack{
-                Text(level.name)
-                    .foregroundColor(Color.black)
-                    .font(.system(size: 25))
+                ZStack{
+                    Text(level.name)
+                        .foregroundColor(Color.black.opacity(1))
+                        .font(.system(size: 25))
+                        .offset(x:0.5,y:0.5)
+                    Text(level.name)
+                        .foregroundColor(Color.green.opacity(1))
+                        .font(.system(size: 25))
+                }
                 Spacer()
                 Text(String(level.highScore))
                     .foregroundColor(Color.black)

@@ -30,7 +30,7 @@ struct InGameView: View {
                         }
                         Spacer()
                         Button(action: {
-                            self.gameScene.changeLevel(layout: BrickLayouts.layout_blank)
+                            self.gameScene.changeLevel(layout: BrickLayouts.layout_blank, id: 0)
                             self.gameScene.gameIsPaused = false
                             self.inMenu = true
                         }) {

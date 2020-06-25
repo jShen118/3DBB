@@ -12,6 +12,7 @@ import SceneKit
 
 class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     @Published var score: Int = 0
+    @Published var currentID: Int = 0
     @Published var gameIsPaused: Bool = false {
         didSet {
             isPaused = gameIsPaused
@@ -100,8 +101,9 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         insertBrickLayout(layout: self.currentBrickLayout)
     }
     
-    func changeLevel(layout: BrickLayout){
+    func changeLevel(layout: BrickLayout, id: Int){
         self.currentBrickLayout = layout
+        self.currentID = id
         self.restart()
     }
     
@@ -213,13 +215,19 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
                 case unbreakableBrickColor: break
                 case breakableBrickColor1: contact.nodeB.geometry?.firstMaterial?.diffuse.contents = breakableBrickColor2
                 case breakableBrickColor2: contact.nodeB.geometry?.firstMaterial?.diffuse.contents = breakableBrickColor3
-                default: contact.nodeB.removeFromParentNode(); DispatchQueue.main.async {self.score += 1}
+                default: contact.nodeB.removeFromParentNode(); DispatchQueue.main.async {self.addScore()}
             }
         } else if spinOn {
             //print(contact.nodeB.physicsBody?.velocity)
             let xTorque = contact.nodeB.physicsBody?.velocity.z ?? 0
             let zTorque = contact.nodeB.physicsBody?.velocity.x ?? 0
             contact.nodeA.physicsBody?.applyTorque(SCNVector4(x: xTorque, y: 0.0, z: zTorque, w: 0.01), asImpulse: true)
+        }
+    }
+    func addScore(){
+        self.score += 1
+        if Levels.array[currentID].highScore < score{
+            Levels.array[currentID].highScore = score
         }
     }
 }
