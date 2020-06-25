@@ -137,6 +137,13 @@ struct InGameView: View {
                 }
                 Text("\(gameScene.score)").font(.largeTitle)
                 Spacer(minLength: 500)
+                Button(action: {self.gameScene.reduceLives()}) {
+                    Text("Sacrifice Life")
+                }.frame(width: 200, height: 40)
+                .foregroundColor(.white)
+                .background(Color.red)
+                .cornerRadius(10)
+                .padding()
             }
         }
     }

@@ -52,7 +52,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     
     func frictionSet() {
         rootNode.enumerateChildNodes { (node, stop) in
-            node.physicsBody?.friction = frictionValue
+            if node.name != "bound" {node.physicsBody?.friction = frictionValue}
         }
     }
     
@@ -209,19 +209,20 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         boxFrontNode.physicsBody?.friction = frictionValue
         boxFrontNode.physicsBody?.restitution = 1
         
-        let bound = SCNBox(width: 20, height: 1, length: 20, chamferRadius: 0)
+        let bound = SCNBox(width: 50, height: 1, length: 50, chamferRadius: 0)
         let boundNode = SCNNode(geometry: bound)
         boundNode.name = "bound"
-        boundNode.position = SCNVector3(x: 5.5, y: -6, z: -6.5)
+        boundNode.position = SCNVector3(x: 5.5, y: -10, z: -6.5)
         boundNode.physicsBody = SCNPhysicsBody.static()
         boundNode.opacity = 0
+        boundNode.physicsBody?.friction = 0
         boundNode.physicsBody?.contactTestBitMask = ballCategoryBitMask
         rootNode.addChildNode(boundNode)
     }
     
     //nodeA should always be ball, nodeB should always be brick, bouncer, or bound
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
-        print("\(contact.nodeA.name), \(contact.nodeB.name)")
+        //print("\(contact.nodeA.name), \(contact.nodeB.name)")
         
         if contact.nodeB.name == "brick" {
             let brickColor = contact.nodeB.geometry?.firstMaterial?.diffuse.contents as! UIColor
@@ -238,7 +239,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
             if spinOn {
                 let xTorque = contact.nodeB.physicsBody?.velocity.z ?? 0
                 let zTorque = contact.nodeB.physicsBody?.velocity.x ?? 0
-                print("\(xTorque), \(zTorque)")
+                //print("\(xTorque), \(zTorque)")
                 contact.nodeA.physicsBody?.applyTorque(SCNVector4(x: xTorque, y: 0.0, z: zTorque, w: 1.0), asImpulse: true)
             }
             return
@@ -256,7 +257,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     }
     
     func addScore(){
-        self.score += 1
+        self.score += 10
         if Levels.array[currentID].highScore < score{
             Levels.array[currentID].highScore = score
         }

@@ -17,7 +17,7 @@ struct BrickLayouts {
     static let layout_1: BrickLayout = BrickLayout(breakable: fill(x1: 1, x2: 4, y1: 12, y2: 15, z1: -4, z2: -7) + fill(x1: 8, x2: 11, y1: 12, y2: 15, z1: -4, z2: -7), unbreakable: fill(x1: 1, x2: 4, y1: 11, y2: 11, z1: -4, z2: -7) + fill(x1: 8, x2: 11, y1: 11, y2: 11, z1: -4, z2: -7))
     
     
-    static let layout_2 = BrickLayout(breakable: fill(x1: 1, x2: 11, y1: 12, y2: 18, z1: -1, z2: -12), unbreakable: [])
+    static let layout_2 = BrickLayout(breakable: fill(x1: 1, x2: 2, y1: 9, y2: 15, z1: -3, z2: -10) + fill(x1: 10, x2: 11, y1: 9, y2: 15, z1: -3, z2: -10) + fill(x1: 5, x2: 7, y1: 10, y2: 14, z1: -3, z2: -10), unbreakable: fill(x1: 5, x2: 7, y1: 9, y2: 9, z1: -3, z2: -10) + fill(x1: 5, x2: 7, y1: 15, y2: 15, z1: -3, z2: -10))
     
     
     static let layout_3: BrickLayout = BrickLayout(breakable: [], unbreakable: [])
