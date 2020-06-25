@@ -21,6 +21,13 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     @Published var spinOn: Bool = true {
         didSet {frictionSet()}
     }
+    @Published var bouncerType: BouncerType = .plane {
+        didSet {
+            self.rootNode.childNode(withName: "bouncer", recursively: false)!.removeFromParentNode()
+            bouncerSetUp(bouncerType: bouncerType)
+        }
+    }
+    
     var frictionValue: CGFloat {
         return spinOn ? 1.0 : 0.0
     }
@@ -35,7 +42,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
             node.removeFromParentNode()
         }
         score = 0
-        setUpScene()
+        setUpScene(bouncerType: bouncerType)
     }
     
     func frictionSet() {
@@ -46,10 +53,10 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
     
     override convenience init() {
         self.init(named: "art.scnassets/empty.scn")!
-        setUpScene()
+        setUpScene(bouncerType: bouncerType)
     }
     
-    func setUpScene() {
+    func setUpScene(bouncerType: BouncerType) {
         let ballNode = SCNNode(geometry: SCNSphere(radius: 0.5))
         ballNode.name = "ball"
         ballNode.physicsBody = SCNPhysicsBody.dynamic()
@@ -83,7 +90,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         
         
-        boxSetUp(bouncerType: .plane)
+        boxSetUp(bouncerType: bouncerType)
         brickSetUp()
     }
     
@@ -126,9 +133,7 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         return newBrick
     }
     
-    let boxColor = UIColor(hexaRGB: "#40739e", alpha: 1.0)
-    //bottom left front corner of the "room" is (0,0,0)
-    func boxSetUp(bouncerType: BouncerType) {
+    func bouncerSetUp(bouncerType: BouncerType) {
         var bouncerGeom: SCNGeometry = SCNPlane(width: 4, height: 4)
         if bouncerType == .pyramid {bouncerGeom = SCNPyramid(width: 4, height: 1, length: 4)}
         if bouncerType == .semisphere {bouncerGeom = SCNSphere(radius: 2)}
@@ -144,6 +149,12 @@ class GameScene: SCNScene, ObservableObject, SCNPhysicsContactDelegate {
         bouncerNode.physicsBody?.restitution = 1
         bouncerNode.physicsBody?.contactTestBitMask = ballCategoryBitMask
         rootNode.addChildNode(bouncerNode)
+    }
+    
+    let boxColor = UIColor(hexaRGB: "#40739e", alpha: 1.0)
+    //bottom left front corner of the "room" is (0,0,0)
+    func boxSetUp(bouncerType: BouncerType) {
+        bouncerSetUp(bouncerType: bouncerType)
         
         let boxTop = SCNBox(width: 13, height: 1, length: 13, chamferRadius: 0)
         boxTop.firstMaterial?.diffuse.contents = boxColor
